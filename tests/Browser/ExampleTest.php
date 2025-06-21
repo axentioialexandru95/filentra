@@ -22,7 +22,7 @@ test('can create unique test users for parallel testing', function () {
     ]);
 
     expect($user->email)->toBe($email);
-    expect($user)->toBeInstanceOf(\App\Models\User::class);
+    expect($user)->toBeInstanceOf(\App\Modules\Users\Models\User::class);
 });
 
 test('parallel testing isolation works', function () {

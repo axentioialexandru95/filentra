@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Settings\PasswordController;
-use App\Http\Controllers\Settings\ProfileController;
+use App\Modules\Settings\Controllers\PasswordController;
+use App\Modules\Settings\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,6 +16,6 @@ Route::middleware('auth')->group(function () {
     Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
 
     Route::get('settings/appearance', function () {
-        return Inertia::render('settings/appearance');
+        return Inertia::render('modules/settings/pages/appearance');
     })->name('appearance');
 });

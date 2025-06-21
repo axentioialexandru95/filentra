@@ -17,7 +17,7 @@ it('can create users with unique data for parallel testing', function () {
 
     expect($user->email)->toBe($email);
     expect($user->name)->toBe($name);
-    expect($user)->toBeInstanceOf(\App\Models\User::class);
+    expect($user)->toBeInstanceOf(\App\Modules\Users\Models\User::class);
 });
 
 it('creates isolated test data across parallel processes', function () {
