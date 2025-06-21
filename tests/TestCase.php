@@ -35,6 +35,8 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Create a test user with unique data.
+     *
+     * @param array<string, mixed> $attributes
      */
     protected function createTestUser(array $attributes = []): User
     {
@@ -43,6 +45,8 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Act as a test user.
+     *
+     * @param array<string, mixed> $attributes
      */
     protected function actingAsTestUser(array $attributes = []): static
     {

@@ -1,0 +1,78 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+        - database/
+        - routes/
+        - tests/
+        - config/
+        - bootstrap/providers.php
+
+    # The level of rule strictness (0-9, 9 being the strictest)
+    level: 6
+
+    # Ignore errors in these paths
+    excludePaths:
+        - ./vendor/*
+        - ./storage/*
+        - ./bootstrap/cache/*
+        - ./node_modules/*
+        - ./public/*
+        - ./_ide_helper.php (?)
+        - ./_ide_helper_models.php (?)
+
+    # Ignore specific error patterns
+    ignoreErrors:
+        # Ignore Laravel facade errors
+        - '#Call to an undefined method Illuminate\\.*#'
+
+        # Ignore Inertia render method
+        - '#Call to an undefined method Inertia\\.*#'
+
+        # Ignore missing property errors for Eloquent models (common in Laravel)
+        - '#Access to an undefined property App\\Models\\.*#'
+
+        # Ignore errors in test files for mocking
+        - '#Call to an undefined method .*MockInterface.*#'
+
+        # Ignore Laravel's dynamic properties
+        - '#Property .* does not exist on class Illuminate\\.*#'
+
+        # Ignore database seeders/factories dynamic calls
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\.*Factory.*#'
+
+        # Ignore Pest test function calls
+        - '#Function (test|it|describe|beforeEach|afterEach|beforeAll|afterAll) not found#'
+
+    # Parallel processing
+    parallel:
+        maximumNumberOfProcesses: 4
+
+    # Report possibly undefined variables
+    reportUnmatchedIgnoredErrors: false
+
+    # Treat mixed types as errors
+    treatPhpDocTypesAsCertain: true
+
+    # Laravel specific rules
+    noUnnecessaryCollectionCall: true
+    noUnnecessaryCollectionCallOnly: []
+    noUnnecessaryCollectionCallExcept: []
+
+    # Additional Laravel configurations
+    earlyTerminatingMethodCalls:
+        Illuminate\Http\RedirectResponse:
+            - send
+        Illuminate\Http\JsonResponse:
+            - send
+        Illuminate\Http\Response:
+            - send
+        Symfony\Component\HttpFoundation\Response:
+            - send
+
+    # Universal object crates
+    universalObjectCratesClasses:
+        - Illuminate\Http\Request
+        - Illuminate\Support\Collection
