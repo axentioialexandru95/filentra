@@ -2,9 +2,9 @@
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -36,7 +36,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Create a test user with unique data.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     protected function createTestUser(array $attributes = []): User
     {
@@ -46,11 +46,12 @@ abstract class TestCase extends BaseTestCase
     /**
      * Act as a test user.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     protected function actingAsTestUser(array $attributes = []): static
     {
         $user = $this->createTestUser($attributes);
+
         return $this->actingAs($user);
     }
 
@@ -60,6 +61,7 @@ abstract class TestCase extends BaseTestCase
     protected function getUniqueEmail(string $prefix = 'test'): string
     {
         $uniqueId = config('testing.unique_id', uniqid());
+
         return "{$prefix}_{$uniqueId}@example.com";
     }
 
@@ -69,6 +71,7 @@ abstract class TestCase extends BaseTestCase
     protected function getUniqueString(string $prefix = 'test'): string
     {
         $uniqueId = config('testing.unique_id', uniqid());
+
         return "{$prefix}_{$uniqueId}";
     }
 }

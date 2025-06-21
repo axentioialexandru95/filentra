@@ -8,7 +8,7 @@ test('basic example', function () {
     /** @var \Tests\DuskTestCase $this */
     $this->browse(function (Browser $browser) {
         $browser->visit('/')
-                ->assertTitle('Welcome - Laravel');
+            ->assertTitle('Welcome - Laravel');
     });
 });
 
@@ -34,7 +34,7 @@ test('parallel testing isolation works', function () {
 
     $this->browse(function (Browser $browser) use ($uniqueId) {
         $browser->visit('/')
-                ->assertTitle('Welcome - Laravel');
+            ->assertTitle('Welcome - Laravel');
 
         // Each parallel test gets its own unique context
         expect(config('testing.unique_id'))->toBe($uniqueId);

@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\User;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -9,7 +10,6 @@ use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Illuminate\Support\Collection;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use PHPUnit\Framework\Attributes\BeforeClass;
-use App\Models\User;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -41,7 +41,7 @@ abstract class DuskTestCase extends BaseTestCase
     /**
      * Create a test user with unique data.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     protected function createTestUser(array $attributes = []): User
     {
@@ -54,6 +54,7 @@ abstract class DuskTestCase extends BaseTestCase
     protected function getUniqueEmail(string $prefix = 'dusk'): string
     {
         $uniqueId = config('testing.unique_id', uniqid());
+
         return "{$prefix}_{$uniqueId}@example.com";
     }
 

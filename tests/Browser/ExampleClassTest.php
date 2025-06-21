@@ -9,21 +9,17 @@ class ExampleClassTest extends DuskTestCase
 {
     /**
      * Test basic page loading.
-     *
-     * @return void
      */
     public function test_basic_example(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                    ->assertTitle('Welcome - Laravel');
+                ->assertTitle('Welcome - Laravel');
         });
     }
 
     /**
      * Test that we can create unique test users for parallel testing.
-     *
-     * @return void
      */
     public function test_can_create_unique_test_users_for_parallel_testing(): void
     {
@@ -40,8 +36,6 @@ class ExampleClassTest extends DuskTestCase
 
     /**
      * Test that parallel testing isolation works correctly.
-     *
-     * @return void
      */
     public function test_parallel_testing_isolation_works(): void
     {
@@ -52,7 +46,7 @@ class ExampleClassTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($uniqueId) {
             $browser->visit('/')
-                    ->assertTitle('Welcome - Laravel');
+                ->assertTitle('Welcome - Laravel');
 
             // Each parallel test gets its own unique context
             $this->assertEquals($uniqueId, config('testing.unique_id'));
