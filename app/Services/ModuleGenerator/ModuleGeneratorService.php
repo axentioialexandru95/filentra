@@ -3,25 +3,27 @@
 namespace App\Services\ModuleGenerator;
 
 use App\Services\ModuleGenerator\Generators\BackendGenerator;
-use App\Services\ModuleGenerator\Generators\FrontendGenerator;
 use App\Services\ModuleGenerator\Generators\DatabaseGenerator;
+use App\Services\ModuleGenerator\Generators\FrontendGenerator;
 use Illuminate\Support\Str;
 
 class ModuleGeneratorService
 {
     protected BackendGenerator $backendGenerator;
+
     protected FrontendGenerator $frontendGenerator;
+
     protected DatabaseGenerator $databaseGenerator;
 
     public function __construct()
     {
-        $this->backendGenerator = new BackendGenerator();
-        $this->frontendGenerator = new FrontendGenerator();
-        $this->databaseGenerator = new DatabaseGenerator();
+        $this->backendGenerator = new BackendGenerator;
+        $this->frontendGenerator = new FrontendGenerator;
+        $this->databaseGenerator = new DatabaseGenerator;
     }
 
     /**
-     * @param array<string, bool> $options
+     * @param  array<string, bool>  $options
      */
     public function generate(string $name, array $options = []): ModuleGenerationResult
     {
@@ -48,7 +50,7 @@ class ModuleGeneratorService
     }
 
     /**
-     * @param array<string, bool> $options
+     * @param  array<string, bool>  $options
      */
     protected function shouldGenerateDatabase(array $options): bool
     {
@@ -64,8 +66,9 @@ class ModuleGeneratorService
         $providersPath = base_path('bootstrap/providers.php');
         $providerClass = "App\\Modules\\{$moduleName}\\{$moduleName}ServiceProvider::class";
 
-        if (!file_exists($providersPath)) {
-            $result->addError("Could not find bootstrap/providers.php file");
+        if (! file_exists($providersPath)) {
+            $result->addError('Could not find bootstrap/providers.php file');
+
             return;
         }
 
@@ -73,7 +76,8 @@ class ModuleGeneratorService
 
         // Check if provider is already registered
         if (str_contains($content, $providerClass)) {
-            $result->addWarning("Service provider already registered");
+            $result->addWarning('Service provider already registered');
+
             return;
         }
 
@@ -87,7 +91,7 @@ class ModuleGeneratorService
         $newContent = preg_replace('/(\w),(\w)/', '$1,\n    $2', $newContent);
 
         file_put_contents($providersPath, $newContent);
-        $result->addSuccess("Service provider registered automatically");
+        $result->addSuccess('Service provider registered automatically');
     }
 
     protected function kebabCase(string $value): string

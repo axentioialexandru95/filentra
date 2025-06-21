@@ -4,12 +4,11 @@ namespace App\Services\ModuleGenerator\Generators;
 
 use App\Services\ModuleGenerator\ModuleGenerationResult;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class BackendGenerator
 {
     /**
-     * @param array<string, bool> $options
+     * @param  array<string, bool>  $options
      */
     public function generate(string $moduleName, array $options, ModuleGenerationResult $result): void
     {

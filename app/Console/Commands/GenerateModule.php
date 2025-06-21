@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Services\ModuleGenerator\ModuleGeneratorService;
 use App\Services\ModuleGenerator\ModuleGenerationResult;
+use App\Services\ModuleGenerator\ModuleGeneratorService;
 use Illuminate\Console\Command;
 
 class GenerateModule extends Command
@@ -65,22 +65,23 @@ class GenerateModule extends Command
     }
 
     /**
-     * @param array<string, bool> $options
+     * @param  array<string, bool>  $options
      */
     protected function displayResults(ModuleGenerationResult $result, array $options): void
     {
         if ($result->hasErrors()) {
-            $this->error("❌ Module generation failed!");
+            $this->error('❌ Module generation failed!');
             foreach ($result->getErrors() as $error) {
                 $this->error("   • {$error}");
             }
+
             return;
         }
 
         $this->info("✅ Module {$result->getModuleName()} created successfully!");
         $this->newLine();
 
-        $this->comment("📁 Created structure:");
+        $this->comment('📁 Created structure:');
         $this->line("   Backend:  {$result->getBackendPath()}");
         $this->line("   Frontend: {$result->getFrontendPath()}");
         $this->newLine();
@@ -97,31 +98,31 @@ class GenerateModule extends Command
 
         $this->newLine();
 
-        $this->comment("🚀 Next steps:");
+        $this->comment('🚀 Next steps:');
         $this->displayNextSteps($options, $result);
 
         $this->newLine();
 
-        $this->comment("📋 Files created:");
+        $this->comment('📋 Files created:');
         $this->displayCreatedFiles($result, $options);
     }
 
     /**
-     * @param array<string, bool> $options
+     * @param  array<string, bool>  $options
      */
     protected function displayNextSteps(array $options, ModuleGenerationResult $result): void
     {
-        $steps = ["   1. Run: composer dump-autoload"];
+        $steps = ['   1. Run: composer dump-autoload'];
 
         if ($options['migration'] || $options['crud']) {
-            $steps[] = "   2. Run: php artisan migrate";
-            $steps[] = "   3. Build frontend: npm run build";
+            $steps[] = '   2. Run: php artisan migrate';
+            $steps[] = '   3. Build frontend: npm run build';
         } else {
-            $steps[] = "   2. Build frontend: npm run build";
+            $steps[] = '   2. Build frontend: npm run build';
         }
 
         if ($options['seeder'] || $options['crud']) {
-            $steps[] = "   " . (count($steps) + 1) . ". Run: php artisan db:seed --class={$result->getModuleName()}Seeder";
+            $steps[] = '   '.(count($steps) + 1).". Run: php artisan db:seed --class={$result->getModuleName()}Seeder";
         }
 
         foreach ($steps as $step) {
@@ -130,18 +131,18 @@ class GenerateModule extends Command
     }
 
     /**
-     * @param array<string, bool> $options
+     * @param  array<string, bool>  $options
      */
     protected function displayCreatedFiles(ModuleGenerationResult $result, array $options): void
     {
         $isCrud = $options['crud'];
 
-        $this->line("   • Controllers, Services, Requests, Resources directories");
+        $this->line('   • Controllers, Services, Requests, Resources directories');
         $this->line("   • {$result->getModuleName()}ServiceProvider.php with route loading");
-        $this->line("   • routes.php with " . ($isCrud ? "full CRUD routes" : "sample routes"));
-        $this->line("   • Frontend components, pages, hooks, actions directories");
-        $this->line("   • types.ts with TypeScript interfaces");
-        $this->line("   • " . ($isCrud ? "Complete CRUD React pages with table and forms" : "Sample React page with layout"));
+        $this->line('   • routes.php with '.($isCrud ? 'full CRUD routes' : 'sample routes'));
+        $this->line('   • Frontend components, pages, hooks, actions directories');
+        $this->line('   • types.ts with TypeScript interfaces');
+        $this->line('   • '.($isCrud ? 'Complete CRUD React pages with table and forms' : 'Sample React page with layout'));
 
         if ($options['model'] || $isCrud) {
             $this->line("   • {$result->getModuleName()} model");
@@ -159,7 +160,7 @@ class GenerateModule extends Command
             $this->line("   • API Resource for {$result->getModuleName()}");
         }
 
-        $this->line("   • Service provider auto-registered in bootstrap/providers.php");
+        $this->line('   • Service provider auto-registered in bootstrap/providers.php');
 
         // Show file count summary
         $summary = $result->getSummary();

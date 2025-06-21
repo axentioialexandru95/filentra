@@ -20,7 +20,7 @@ class UsersServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Load routes
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         // Load views if needed
         // $this->loadViewsFrom(__DIR__ . '/views', 'users');

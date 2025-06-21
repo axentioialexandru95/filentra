@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'email' => $this->resource->email,
-            'email_verified_at' => $this->whenNotNull($this->resource->email_verified_at, fn($date) => $date->format('Y-m-d H:i:s')),
+            'email_verified_at' => $this->whenNotNull($this->resource->email_verified_at, fn ($date) => $date->format('Y-m-d H:i:s')),
             'created_at' => $this->resource->created_at->format('Y-m-d H:i:S'),
             'updated_at' => $this->resource->updated_at->format('Y-m-d H:i:s'),
         ];

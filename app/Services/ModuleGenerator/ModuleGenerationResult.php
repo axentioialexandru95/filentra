@@ -5,17 +5,24 @@ namespace App\Services\ModuleGenerator;
 class ModuleGenerationResult
 {
     protected string $moduleName;
+
     protected string $moduleNameLower;
+
     /** @var array<int, array{path: string, type: string, created_at: \Illuminate\Support\Carbon}> */
     protected array $createdFiles = [];
+
     /** @var array<int, array{path: string, created_at: \Illuminate\Support\Carbon}> */
     protected array $createdDirectories = [];
+
     /** @var array<int, array{message: string, type: string, timestamp: \Illuminate\Support\Carbon}> */
     protected array $messages = [];
+
     /** @var array<int, string> */
     protected array $errors = [];
+
     /** @var array<int, string> */
     protected array $warnings = [];
+
     /** @var array<int, string> */
     protected array $successes = [];
 
@@ -129,17 +136,17 @@ class ModuleGenerationResult
 
     public function hasErrors(): bool
     {
-        return !empty($this->errors);
+        return ! empty($this->errors);
     }
 
     public function hasWarnings(): bool
     {
-        return !empty($this->warnings);
+        return ! empty($this->warnings);
     }
 
     public function isSuccessful(): bool
     {
-        return !$this->hasErrors();
+        return ! $this->hasErrors();
     }
 
     public function getBackendPath(): string

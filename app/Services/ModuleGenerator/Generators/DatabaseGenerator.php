@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class DatabaseGenerator
 {
     /**
-     * @param array<string, bool> $options
+     * @param  array<string, bool>  $options
      */
     public function generate(string $moduleName, array $options, ModuleGenerationResult $result): void
     {

@@ -4,9 +4,9 @@ namespace App\Modules\Users\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Users\Models\User;
-use App\Modules\Users\Resources\UserResource;
 use App\Modules\Users\Requests\StoreUserRequest;
 use App\Modules\Users\Requests\UpdateUserRequest;
+use App\Modules\Users\Resources\UserResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,7 +21,7 @@ class UserController extends Controller
         $users = User::query()
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             })
             ->when($request->status, function ($query, $status) {
                 if ($status === 'verified') {
@@ -129,7 +129,7 @@ class UserController extends Controller
         $users = User::query()
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             })
             ->when($request->status, function ($query, $status) {
                 if ($status === 'verified') {
