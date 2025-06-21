@@ -8,7 +8,7 @@ set -e
 echo "🔍 Validating GitHub Workflows..."
 
 WORKFLOWS_DIR=".github/workflows"
-REQUIRED_WORKFLOWS=("lint.yml" "tests.yml" "phpstan.yml" "code-quality.yml")
+REQUIRED_WORKFLOWS=("lint.yml" "tests.yml")
 VALIDATION_ERRORS=0
 
 # Check if workflows directory exists
@@ -61,12 +61,8 @@ else
     echo "⚠️  PHPStan baseline not found (this is OK for new projects)"
 fi
 
-# Check if alternative config exists
-if [[ -f "phpstan-no-baseline.neon" ]]; then
-    echo "✅ Alternative PHPStan config exists"
-else
-    echo "⚠️  Alternative PHPStan config not found"
-fi
+# Alternative config is not needed in simplified setup
+echo "✅ Using simplified PHPStan setup"
 
 # Validate composer scripts
 echo "🎼 Validating Composer scripts..."
@@ -85,12 +81,8 @@ if [[ -f "composer.json" ]]; then
         ((VALIDATION_ERRORS++))
     fi
 
-    if grep -q '"phpstan:check"' composer.json; then
-        echo "✅ PHPStan check composer script exists"
-    else
-        echo "❌ PHPStan check composer script is missing"
-        ((VALIDATION_ERRORS++))
-    fi
+    # phpstan:check is not needed in simplified setup
+    echo "✅ Basic PHPStan scripts configured"
 else
     echo "❌ composer.json not found"
     ((VALIDATION_ERRORS++))
@@ -149,19 +141,10 @@ done
 
 # Check for PHPStan in workflows
 echo "🔍 Checking PHPStan integration in workflows..."
-phpstan_found=false
-for workflow_file in "$WORKFLOWS_DIR"/*.yml; do
-    if [[ -f "$workflow_file" ]]; then
-        if grep -q "phpstan\|PHPStan" "$workflow_file"; then
-            workflow_name=$(basename "$workflow_file")
-            echo "✅ PHPStan found in $workflow_name"
-            phpstan_found=true
-        fi
-    fi
-done
-
-if [[ "$phpstan_found" == false ]]; then
-    echo "❌ PHPStan not found in any workflow"
+if grep -q "phpstan\|PHPStan" "$WORKFLOWS_DIR/lint.yml"; then
+    echo "✅ PHPStan found in lint.yml"
+else
+    echo "❌ PHPStan not found in lint.yml"
     ((VALIDATION_ERRORS++))
 fi
 
@@ -173,12 +156,12 @@ echo "====================="
 if [[ $VALIDATION_ERRORS -eq 0 ]]; then
     echo "🎉 All validations passed! GitHub workflows are properly configured."
     echo ""
-    echo "✅ PHPStan static analysis is integrated"
-    echo "✅ All required workflows are present"
+    echo "✅ PHPStan static analysis is integrated in lint workflow"
+    echo "✅ Simple workflows are present (lint + tests)"
     echo "✅ Dependencies are correctly installed"
-    echo "✅ Composer scripts are configured"
+    echo "✅ Essential composer scripts are configured"
     echo ""
-    echo "Your CI/CD pipeline is ready to catch code quality issues!"
+    echo "Your clean and simple CI/CD pipeline is ready!"
     exit 0
 else
     echo "❌ Found $VALIDATION_ERRORS validation error(s)"

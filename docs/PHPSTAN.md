@@ -18,7 +18,7 @@ PHPStan is configured via `phpstan.neon` in the project root. The current config
 - **Paths Analyzed**: `app/`, `database/`, `routes/`, `tests/`, `config/`, `bootstrap/providers.php`
 - **Extensions**: Larastan v3.x (Laravel-specific rules and understanding)
 - **Baseline**: `phpstan-baseline.neon` (existing errors to ignore while focusing on new issues)
-- **Alternative Config**: `phpstan-no-baseline.neon` (for checking all errors including baseline)
+- **Simple Setup**: Clean configuration focused on essential analysis
 
 ## Usage
 
@@ -36,9 +36,6 @@ composer phpstan
 ```bash
 # Standard analysis (with baseline - shows only new errors)
 composer phpstan
-
-# Check all errors (ignores baseline - shows everything)
-composer phpstan:check
 
 # Generate a new baseline (use when you want to ignore current errors)
 composer phpstan:baseline
@@ -145,25 +142,20 @@ composer phpstan:baseline
 ### Best Practices
 
 ### 1. Run PHPStan in CI/CD ✅
-PHPStan is already integrated in GitHub Actions workflows:
+PHPStan is integrated in GitHub Actions workflow:
 
-- **lint.yml**: Runs PHPStan on every push/PR
-- **phpstan.yml**: Dedicated PHPStan workflow with caching
-- **code-quality.yml**: Comprehensive quality checks including PHPStan
+- **lint.yml**: Runs PHPStan on every push/PR alongside code style checks
 
-The workflows automatically:
-- Run standard analysis (baseline-aware) on all commits
-- Run full analysis (all errors) on pull requests
-- Cache results for faster execution
-- Provide detailed error reporting
+The workflow automatically:
+- Runs standard analysis (baseline-aware) on all commits
+- Checks code style with Laravel Pint
+- Validates TypeScript and frontend code
+- Provides clear error reporting
 
 To manually trigger workflows:
 ```bash
 # Push changes to trigger workflows
 git push origin feature-branch
-
-# Or create a pull request
-gh pr create --title "Feature" --body "Description"
 ```
 
 ### 2. Fix New Errors Immediately
@@ -241,44 +233,36 @@ Validate your configuration:
 
 ### GitHub Workflows
 
-Three workflows are configured for different purposes:
+Two simple workflows handle all quality checks:
 
-#### 1. `lint.yml` - Quick Linting
+#### 1. `lint.yml` - Code Quality
 - Runs on every push/PR
-- Includes PHP Pint, ESLint, Prettier, and PHPStan
-- Fast execution for immediate feedback
+- PHP code style (Pint)
+- PHPStan static analysis
+- TypeScript type checking
+- Frontend linting (ESLint)
+- Format checking (Prettier)
 
-#### 2. `phpstan.yml` - Dedicated Static Analysis
-- Comprehensive PHPStan analysis
-- Caches results for performance
-- Runs full analysis on pull requests
-
-#### 3. `code-quality.yml` - Complete Quality Suite
-- PHP quality checks (Pint + PHPStan)
-- Frontend quality checks (TypeScript + ESLint + Prettier)
-- Security audits
-- Test coverage requirements
+#### 2. `tests.yml` - Test Suite
+- Runs all PHP tests with Pest
+- Builds frontend assets
+- Simple and focused testing
 
 ### Workflow Configuration
 
 ```yaml
-# Example PHPStan step in GitHub Actions
-- name: Run PHPStan Analysis
+# PHPStan integration in lint workflow
+- name: Run PHPStan
   run: composer phpstan
-
-- name: Cache PHPStan Results
-  uses: actions/cache@v4
-  with:
-    path: .phpstan-cache
-    key: ${{ runner.os }}-phpstan-${{ github.sha }}
 ```
 
 ### Status Checks
 
-All workflows are configured as required status checks, meaning:
+The workflows are configured as required status checks:
 - Pull requests cannot be merged if PHPStan fails
 - New errors must be fixed before merging
 - Baseline errors don't block merges
+- Simple and predictable workflow execution
 
 ## Resources
 

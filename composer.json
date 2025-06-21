@@ -79,9 +79,6 @@
         ],
         "phpstan:clear": [
             "./vendor/bin/phpstan clear-result-cache"
-        ],
-        "phpstan:check": [
-            "./scripts/phpstan-check.sh"
         ]
     },
     "extra": {

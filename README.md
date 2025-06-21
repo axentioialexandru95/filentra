@@ -92,10 +92,10 @@ php artisan dusk # Browser tests
    ```
 
 4. **Create Pull Request**
-   - GitHub Actions automatically run all quality checks
+   - GitHub Actions automatically run quality checks
    - PHPStan must pass (only new errors block merge)
    - All tests must pass
-   - Code coverage requirements enforced
+   - Code style and linting must pass
 
 ## Testing
 
@@ -140,11 +140,8 @@ Filentra/
 
 ## Documentation
 
-- [Architecture Overview](docs/ARCHITECTURE.md)
-- [Database Schema](docs/DATABASE_SCHEMA.md)
 - [PHPStan Setup](docs/PHPSTAN.md)
 - [Testing Guide](docs/TESTING_SETUP.md)
-- [Implementation Guide](docs/IMPLEMENTATION_GUIDE.md)
 
 ## CI/CD
 
@@ -152,8 +149,8 @@ GitHub Actions workflows automatically:
 - Run PHPStan static analysis
 - Execute all test suites
 - Check code formatting
-- Perform security audits
-- Enforce code coverage requirements
+- Lint frontend code
+- Validate TypeScript types
 
 ## Contributing
 
@@ -165,8 +162,9 @@ GitHub Actions workflows automatically:
 
 **Quality Requirements:**
 - PHPStan Level 6 compliance
-- Test coverage > 80%
-- All linting rules pass
+- All tests pass
+- Code style compliance (Pint)
+- Frontend linting passes
 - No new PHPStan errors
 
 ## License
