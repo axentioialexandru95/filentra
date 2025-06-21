@@ -13,7 +13,6 @@
 .phpactor.json
 .phpunit.result.cache
 .phpstan-cache
-phpstan-baseline.neon
 Homestead.json
 Homestead.yaml
 npm-debug.log
