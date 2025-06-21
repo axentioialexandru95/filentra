@@ -1,5 +1,9 @@
 <?php
 
+pest()->extend(Tests\DuskTestCase::class)
+//  ->use(Illuminate\Foundation\Testing\DatabaseMigrations::class)
+    ->in('Browser');
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -12,8 +16,7 @@
 */
 
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +29,7 @@ pest()->extend(Tests\TestCase::class)
 |
 */
 
-expect()->extend('toBeOne', function () {
+expect()->extend('toBeOne', function (): \Pest\Expectation {
     return $this->toBe(1);
 });
 
@@ -41,7 +44,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function something(): void
 {
     // ..
 }

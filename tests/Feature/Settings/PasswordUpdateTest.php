@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
