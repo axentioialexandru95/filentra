@@ -8,6 +8,9 @@ use Illuminate\Support\Str;
 
 class BackendGenerator
 {
+    /**
+     * @param array<string, bool> $options
+     */
     public function generate(string $moduleName, array $options, ModuleGenerationResult $result): void
     {
         $basePath = app_path("Modules/{$moduleName}");

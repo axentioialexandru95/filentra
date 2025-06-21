@@ -8,6 +8,9 @@ use Illuminate\Support\Str;
 
 class FrontendGenerator
 {
+    /**
+     * @param array<string, bool> $options
+     */
     public function generate(string $moduleNameLower, array $options, ModuleGenerationResult $result): void
     {
         $basePath = resource_path("js/modules/{$moduleNameLower}");

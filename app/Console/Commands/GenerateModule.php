@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\ModuleGenerator\ModuleGeneratorService;
+use App\Services\ModuleGenerator\ModuleGenerationResult;
 use Illuminate\Console\Command;
 
 class GenerateModule extends Command
@@ -38,7 +39,7 @@ class GenerateModule extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $name = $this->argument('name');
 
@@ -59,9 +60,14 @@ class GenerateModule extends Command
 
         // Display results
         $this->displayResults($result, $options);
+
+        return Command::SUCCESS;
     }
 
-    protected function displayResults($result, array $options): void
+    /**
+     * @param array<string, bool> $options
+     */
+    protected function displayResults(ModuleGenerationResult $result, array $options): void
     {
         if ($result->hasErrors()) {
             $this->error("❌ Module generation failed!");
@@ -100,7 +106,10 @@ class GenerateModule extends Command
         $this->displayCreatedFiles($result, $options);
     }
 
-    protected function displayNextSteps(array $options, $result): void
+    /**
+     * @param array<string, bool> $options
+     */
+    protected function displayNextSteps(array $options, ModuleGenerationResult $result): void
     {
         $steps = ["   1. Run: composer dump-autoload"];
 
@@ -120,7 +129,10 @@ class GenerateModule extends Command
         }
     }
 
-    protected function displayCreatedFiles($result, array $options): void
+    /**
+     * @param array<string, bool> $options
+     */
+    protected function displayCreatedFiles(ModuleGenerationResult $result, array $options): void
     {
         $isCrud = $options['crud'];
 

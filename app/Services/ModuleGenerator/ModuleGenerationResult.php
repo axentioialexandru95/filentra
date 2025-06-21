@@ -6,11 +6,17 @@ class ModuleGenerationResult
 {
     protected string $moduleName;
     protected string $moduleNameLower;
+    /** @var array<int, array{path: string, type: string, created_at: \Illuminate\Support\Carbon}> */
     protected array $createdFiles = [];
+    /** @var array<int, array{path: string, created_at: \Illuminate\Support\Carbon}> */
     protected array $createdDirectories = [];
+    /** @var array<int, array{message: string, type: string, timestamp: \Illuminate\Support\Carbon}> */
     protected array $messages = [];
+    /** @var array<int, string> */
     protected array $errors = [];
+    /** @var array<int, string> */
     protected array $warnings = [];
+    /** @var array<int, string> */
     protected array $successes = [];
 
     public function __construct(string $moduleName, string $moduleNameLower)
@@ -73,31 +79,49 @@ class ModuleGenerationResult
         $this->addMessage($message, 'success');
     }
 
+    /**
+     * @return array<int, array{path: string, type: string, created_at: \Illuminate\Support\Carbon}>
+     */
     public function getCreatedFiles(): array
     {
         return $this->createdFiles;
     }
 
+    /**
+     * @return array<int, array{path: string, created_at: \Illuminate\Support\Carbon}>
+     */
     public function getCreatedDirectories(): array
     {
         return $this->createdDirectories;
     }
 
+    /**
+     * @return array<int, array{message: string, type: string, timestamp: \Illuminate\Support\Carbon}>
+     */
     public function getMessages(): array
     {
         return $this->messages;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getErrors(): array
     {
         return $this->errors;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getWarnings(): array
     {
         return $this->warnings;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getSuccesses(): array
     {
         return $this->successes;
@@ -128,6 +152,9 @@ class ModuleGenerationResult
         return "resources/js/modules/{$this->moduleNameLower}/";
     }
 
+    /**
+     * @return array{module_name: string, module_name_lower: string, backend_path: string, frontend_path: string, files_created: int, directories_created: int, errors: int, warnings: int, successes: int, is_successful: bool}
+     */
     public function getSummary(): array
     {
         return [

@@ -20,6 +20,9 @@ class ModuleGeneratorService
         $this->databaseGenerator = new DatabaseGenerator();
     }
 
+    /**
+     * @param array<string, bool> $options
+     */
     public function generate(string $name, array $options = []): ModuleGenerationResult
     {
         $moduleName = Str::studly($name);
@@ -44,13 +47,16 @@ class ModuleGeneratorService
         return $result;
     }
 
+    /**
+     * @param array<string, bool> $options
+     */
     protected function shouldGenerateDatabase(array $options): bool
     {
-        return $options['crud'] ?? false ||
-               $options['model'] ?? false ||
-               $options['migration'] ?? false ||
-               $options['factory'] ?? false ||
-               $options['seeder'] ?? false;
+        return ($options['crud'] ?? false) ||
+               ($options['model'] ?? false) ||
+               ($options['migration'] ?? false) ||
+               ($options['factory'] ?? false) ||
+               ($options['seeder'] ?? false);
     }
 
     protected function registerServiceProvider(string $moduleName, ModuleGenerationResult $result): void
