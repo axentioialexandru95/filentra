@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filentra - Database ERD Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8fafc;
+            color: #1a202c;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f7fafc;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .zoom-info {
+            margin-left: auto;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .diagram-container {
+            padding: 40px;
+            text-align: center;
+            min-height: 600px;
+            overflow: auto;
+        }
+
+        .mermaid {
+            background: white;
+            border-radius: 8px;
+        }
+
+        .loading {
+            color: #6b7280;
+            font-size: 18px;
+            margin: 100px 0;
+        }
+
+        .error {
+            color: #dc2626;
+            background: #fef2f2;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #dc2626;
+            margin: 20px;
+        }
+
+        .table-legend {
+            margin: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .legend-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .legend-title {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 4px;
+        }
+
+        .legend-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .zoom-info {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .diagram-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗄️ Filentra Database ERD</h1>
+            <p>Multi-Tenant SaaS Database Schema Visualization</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="zoomIn()">🔍 Zoom In</button>
+            <button class="btn btn-primary" onclick="zoomOut()">🔍 Zoom Out</button>
+            <button class="btn btn-secondary" onclick="resetZoom()">↺ Reset Zoom</button>
+            <button class="btn btn-secondary" onclick="downloadSVG()">💾 Download SVG</button>
+            <button class="btn btn-secondary" onclick="toggleLegend()">📋 Toggle Legend</button>
+            <div class="zoom-info">
+                <span id="zoomLevel">Zoom: 100%</span>
+            </div>
+        </div>
+
+        <div class="diagram-container">
+            <div class="loading" id="loading">Loading ERD diagram...</div>
+            <div class="mermaid" id="mermaid-diagram" style="display: none;">
+erDiagram
+    %% Core Tenant Management
+    tenants ||--o{ users : "has many"
+    tenants ||--o{ domains : "has many"
+    tenants ||--o{ tenant_settings : "has many"
+    tenants ||--o{ subscriptions : "has many"
+    tenants ||--o{ audit_logs : "has many"
+
+    %% User Management & Auth
+    users ||--o{ model_has_permissions : "has many"
+    users ||--o{ model_has_roles : "has many"
+    users ||--o{ personal_access_tokens : "has many"
+    users ||--o{ password_reset_tokens : "has many"
+    users ||--o{ user_settings : "has many"
+    users ||--o{ audit_logs : "creates"
+
+    %% RBAC System
+    roles ||--o{ model_has_roles : "assigned to"
+    roles ||--o{ role_has_permissions : "has many"
+    permissions ||--o{ model_has_permissions : "assigned to"
+    permissions ||--o{ role_has_permissions : "belongs to"
+
+    %% Feature Flag System
+    tenants ||--o{ feature_flags : "has many"
+    users ||--o{ feature_flags : "has many"
+
+    %% Module System Examples
+    tenants ||--o{ posts : "has many"
+    tenants ||--o{ categories : "has many"
+    users ||--o{ posts : "creates"
+    categories ||--o{ posts : "categorizes"
+
+    %% Audit & Monitoring
+    tenants ||--o{ activity_logs : "has many"
+    users ||--o{ activity_logs : "performs"
+
+    %% File Management
+    tenants ||--o{ media : "owns"
+    users ||--o{ media : "uploads"
+    posts ||--o{ media : "uses"
+
+    %% Table Definitions
+    tenants {
+        bigint id PK
+        varchar name
+        varchar slug UK
+        varchar subdomain UK
+        varchar domain UK
+        enum status
+        enum plan
+        timestamp trial_ends_at
+        json settings
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    users {
+        bigint id PK
+        bigint tenant_id FK
+        varchar name
+        varchar email
+        timestamp email_verified_at
+        varchar password
+        varchar avatar_url
+        varchar timezone
+        varchar language
+        timestamp last_login_at
+        varchar last_login_ip
+        boolean is_active
+        text two_factor_secret
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    roles {
+        bigint id PK
+        bigint tenant_id FK
+        varchar name
+        varchar guard_name
+        text description
+        boolean is_default
+        integer level
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    permissions {
+        bigint id PK
+        varchar name
+        varchar guard_name
+        varchar module
+        varchar resource
+        varchar action
+        varchar scope
+        text description
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    feature_flags {
+        bigint id PK
+        varchar name
+        varchar scope_type
+        bigint scope_id
+        json value
+        boolean enabled
+        integer rollout_percentage
+        json metadata
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    subscriptions {
+        bigint id PK
+        bigint tenant_id FK
+        varchar plan
+        enum status
+        timestamp current_period_start
+        timestamp current_period_end
+        timestamp trial_ends_at
+        enum billing_cycle
+        decimal amount
+        varchar currency
+        varchar stripe_subscription_id
+        json metadata
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    posts {
+        bigint id PK
+        bigint tenant_id FK
+        bigint user_id FK
+        bigint category_id FK
+        varchar title
+        varchar slug UK
+        text excerpt
+        longtext content
+        enum status
+        timestamp published_at
+        bigint featured_image_id FK
+        integer views_count
+        json metadata
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    categories {
+        bigint id PK
+        bigint tenant_id FK
+        bigint parent_id FK
+        varchar name
+        varchar slug UK
+        text description
+        boolean is_active
+        integer sort_order
+        json metadata
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    media {
+        bigint id PK
+        bigint tenant_id FK
+        bigint user_id FK
+        varchar collection_name
+        varchar name
+        varchar file_name
+        varchar mime_type
+        varchar disk
+        bigint size
+        json manipulations
+        json custom_properties
+        json generated_conversions
+        integer order_column
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    audit_logs {
+        bigint id PK
+        bigint tenant_id FK
+        bigint user_id FK
+        varchar event
+        varchar auditable_type
+        bigint auditable_id
+        json old_values
+        json new_values
+        text url
+        varchar ip_address
+        text user_agent
+        varchar tags
+        timestamp created_at
+    }
+            </div>
+        </div>
+
+        <div class="table-legend" id="legend" style="display: none;">
+            <h3>📋 Database Schema Legend</h3>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-title">Core Tables</div>
+                    <div class="legend-desc">tenants, users, domains, subscriptions</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-title">RBAC System</div>
+                    <div class="legend-desc">roles, permissions, model_has_* tables</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-title">Feature Flags</div>
+                    <div class="legend-desc">feature_flags with scope support</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-title">Audit System</div>
+                    <div class="legend-desc">audit_logs, activity_logs for compliance</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-title">Content Management</div>
+                    <div class="legend-desc">posts, categories, media (examples)</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-title">Settings</div>
+                    <div class="legend-desc">tenant_settings, user_settings</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentZoom = 1;
+        let legendVisible = false;
+
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            er: {
+                useMaxWidth: true,
+                fontSize: 12,
+                curve: 'basis'
+            }
+        });
+
+        // Render the diagram
+        async function renderDiagram() {
+            try {
+                const element = document.getElementById('mermaid-diagram');
+                const loading = document.getElementById('loading');
+
+                await mermaid.run({
+                    nodes: [element]
+                });
+
+                loading.style.display = 'none';
+                element.style.display = 'block';
+
+                // Make diagram interactive
+                const svg = element.querySelector('svg');
+                if (svg) {
+                    svg.style.cursor = 'grab';
+                    svg.style.transition = 'transform 0.3s ease';
+                    makeDraggable(svg);
+                }
+            } catch (error) {
+                console.error('Error rendering diagram:', error);
+                document.getElementById('loading').innerHTML =
+                    '<div class="error">❌ Error rendering diagram. Please check the console for details.</div>';
+            }
+        }
+
+        // Zoom functions
+        function zoomIn() {
+            currentZoom = Math.min(currentZoom * 1.2, 3);
+            applyZoom();
+        }
+
+        function zoomOut() {
+            currentZoom = Math.max(currentZoom / 1.2, 0.3);
+            applyZoom();
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            applyZoom();
+        }
+
+        function applyZoom() {
+            const svg = document.querySelector('#mermaid-diagram svg');
+            if (svg) {
+                svg.style.transform = `scale(${currentZoom})`;
+                document.getElementById('zoomLevel').textContent = `Zoom: ${Math.round(currentZoom * 100)}%`;
+            }
+        }
+
+        // Download SVG
+        function downloadSVG() {
+            const svg = document.querySelector('#mermaid-diagram svg');
+            if (svg) {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+                const svgUrl = URL.createObjectURL(svgBlob);
+
+                const downloadLink = document.createElement('a');
+                downloadLink.href = svgUrl;
+                downloadLink.download = 'filentra-erd.svg';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(svgUrl);
+            }
+        }
+
+        // Toggle legend
+        function toggleLegend() {
+            const legend = document.getElementById('legend');
+            legendVisible = !legendVisible;
+            legend.style.display = legendVisible ? 'block' : 'none';
+        }
+
+        // Make diagram draggable
+        function makeDraggable(element) {
+            let isDragging = false;
+            let startX, startY, startTransformX = 0, startTransformY = 0;
+
+            element.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                element.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+
+                element.style.transform = `scale(${currentZoom}) translate(${startTransformX + deltaX}px, ${startTransformY + deltaY}px)`;
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    element.style.cursor = 'grab';
+
+                    // Update start transform for next drag
+                    const transform = element.style.transform;
+                    const translateMatch = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+                    if (translateMatch) {
+                        startTransformX = parseFloat(translateMatch[1]);
+                        startTransformY = parseFloat(translateMatch[2]);
+                    }
+                }
+            });
+
+            // Mouse wheel zoom
+            element.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                if (e.deltaY < 0) {
+                    zoomIn();
+                } else {
+                    zoomOut();
+                }
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '=':
+                    case '+':
+                        e.preventDefault();
+                        zoomIn();
+                        break;
+                    case '-':
+                        e.preventDefault();
+                        zoomOut();
+                        break;
+                    case '0':
+                        e.preventDefault();
+                        resetZoom();
+                        break;
+                }
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', renderDiagram);
+    </script>
+</body>
+</html>

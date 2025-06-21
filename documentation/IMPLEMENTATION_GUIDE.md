@@ -174,31 +174,43 @@ resources/js/modules/[module-name]/
 - [ ] Integrate feature flags with permissions
 - [ ] Create combined feature + permission service
 
-## 🧩 Phase 4: Module System (Week 2-3)
+## 🧩 Phase 4: Single Panel Architecture & Module System (Week 2-3)
 
-### **4.1 Create Base Module Provider**
+### **4.1 Create Unified Dashboard Structure**
+**TODO:**
+- [ ] Create dashboard controller directory (`app/Http/Controllers/`)
+- [ ] Set up unified route structure with permission-based access
+- [ ] Create permission-checking middleware for routes
+- [ ] Implement role-aware navigation system
+
+### **4.2 Create Base Module Provider**
 **TODO:**
 - [ ] Create `app/Core/Providers/ModuleServiceProvider.php`
-- [ ] Implement automatic route loading
+- [ ] Implement automatic route loading with permission awareness
 - [ ] Add module registration system
-- [ ] Create module discovery
+- [ ] Create module discovery with role-based features
 
-### **4.2 Move Existing Code to Modules**
+### **4.3 Move Existing Code to Unified Structure**
 **TODO:**
 - [ ] Move `app/Http/Controllers/Auth/` to `app/Modules/Auth/Controllers/`
 - [ ] Move `app/Http/Controllers/Settings/` to `app/Modules/Settings/Controllers/`
+- [ ] Organize controllers for dashboard functionality
 - [ ] Create service providers for each module
-- [ ] Update route definitions
+- [ ] Update route definitions for single dashboard structure
+- [ ] Create role-aware layouts and components
 
-### **2.4 Frontend Module System**
+### **4.4 Frontend Single Panel Architecture**
 **TODO:**
-- [ ] Create module registry in TypeScript
+- [ ] Create unified dashboard layout (`resources/js/layouts/DashboardLayout.tsx`)
+- [ ] Implement permission-based component rendering
+- [ ] Create role-aware navigation system
 - [ ] Move authentication components to `resources/js/modules/auth/`
-- [ ] Create module-based navigation
-- [ ] Add permission-based route guards
-- [ ] Implement React 19 form action patterns
+- [ ] Create adaptive navigation components based on user permissions
+- [ ] Add permission-based route guards for single dashboard
+- [ ] Implement React 19 form action patterns with role awareness
 - [ ] Set up `useActionState` and `useFormStatus` patterns
 - [ ] Configure optimistic updates with `useOptimistic`
+- [ ] Create permission checking hooks (`usePermissions`, `useAuth`)
 
 ## 🧪 Phase 5: Testing Setup (Week 3)
 
@@ -245,41 +257,55 @@ resources/js/modules/[module-name]/
 - [ ] Use `useActionState` for form state management
 - [ ] Test authentication flows
 
-### **6.2 Dashboard Module**
+### **6.2 Dashboard Module (Unified Interface)**
 **TODO:**
-- [ ] Create dashboard layout with feature flag integration
-- [ ] Add tenant information display
-- [ ] Create user statistics
-- [ ] Add quick actions using React 19 form actions
+- [ ] Create unified dashboard layout with feature flag integration
+- [ ] Add personal task management for all users
+- [ ] Create role-aware dashboard components
+- [ ] Add quick actions using React 19 form actions with permission checks
 - [ ] Implement optimistic updates for interactions
-- [ ] Test dashboard functionality
+- [ ] Create adaptive navigation based on user role
+- [ ] Test dashboard functionality across all roles
 
-### **6.3 Users Module**
+### **6.3 Users Module (Role-Aware)**
 **TODO:**
 - [ ] Create user CRUD operations with modern form patterns
 - [ ] Add role management with feature flag integration
-- [ ] Implement user permissions
+- [ ] Implement permission-based user interfaces (show admin features only to admins)
 - [ ] Add user search and filtering with optimistic updates
 - [ ] Use `useFormStatus` for submission states
-- [ ] Test user management
+- [ ] Create role-aware user actions and views
+- [ ] Test user management with different permission levels
 
-### **6.4 Tenants Module**
+### **6.4 Settings Module (Permission-Based)**
 **TODO:**
-- [ ] Create tenant management (for admins)
-- [ ] Add tenant settings with feature flag controls
-- [ ] Implement tenant status management
-- [ ] Add tenant statistics
-- [ ] Use React 19 patterns for all forms
-- [ ] Test tenant operations
-
-### **6.5 Settings Module**
-**TODO:**
-- [ ] Create tenant settings management
-- [ ] Add user preferences with real-time validation
-- [ ] Implement configuration options
+- [ ] Create tenant settings management (visible to admins only)
+- [ ] Add user preferences (available to all users)
+- [ ] Implement permission-based configuration options
 - [ ] Add settings validation with Precognition
 - [ ] Use modern form patterns throughout
-- [ ] Test settings functionality
+- [ ] Create adaptive settings interface based on user permissions
+- [ ] Test settings functionality across permission levels
+
+### **6.5 Billing Module (Admin-Only)**
+**TODO:**
+- [ ] Create billing management interface (admin permission required)
+- [ ] Add subscription management features
+- [ ] Implement billing analytics and reporting
+- [ ] Add payment method management
+- [ ] Create billing history and invoices
+- [ ] Use permission guards to restrict access
+- [ ] Test billing functionality with admin users only
+
+### **6.6 Reports Module (Role-Based Access)**
+**TODO:**
+- [ ] Create role-aware reporting interface
+- [ ] Add user-specific reports (basic users)
+- [ ] Implement team reports (managers)
+- [ ] Add tenant-wide reports (admins)
+- [ ] Create customizable dashboard widgets
+- [ ] Add export functionality with permission checks
+- [ ] Test reporting across different user roles
 
 ## 🎨 Phase 7: Frontend Polish (Week 5-6)
 
@@ -292,15 +318,26 @@ resources/js/modules/[module-name]/
 - [ ] Implement optimistic updates where appropriate
 - [ ] Improve user experience with instant feedback
 
-### **7.2 Permission & Feature-Based UI**
+### **7.2 Adaptive UI & Navigation**
 **TODO:**
-- [ ] Hide/show components based on permissions AND feature flags
-- [ ] Add combined permission + feature navigation
-- [ ] Create role-based dashboards with feature toggles
-- [ ] Add permission and feature indicators
-- [ ] Test permission-based rendering
-- [ ] Test feature flag scenarios
-- [ ] Create unified authorization component
+- [ ] Create single adaptive navigation component that changes based on user role
+- [ ] Implement progressive navigation disclosure based on permissions
+- [ ] Add permission and role indicators in UI
+- [ ] Create shared components that adapt to user context
+- [ ] Implement unified feature flag integrations
+- [ ] Add role-aware loading and error states
+- [ ] Test navigation adaptation across different roles
+- [ ] Create unified authorization component system
+
+### **7.3 Permission & Feature-Based UI**
+**TODO:**
+- [ ] Hide/show components based on permissions AND feature flags dynamically
+- [ ] Add combined permission + feature navigation system
+- [ ] Create role-based dashboard experiences with feature toggles
+- [ ] Add permission and feature indicators throughout the interface
+- [ ] Test permission-based rendering with different user roles
+- [ ] Test feature flag scenarios across user types
+- [ ] Create contextual help and guidance based on user capabilities
 
 ## ✅ Phase 8: Testing & Validation (Week 6)
 
@@ -318,13 +355,15 @@ resources/js/modules/[module-name]/
 ### **8.2 Security Validation**
 **TODO:**
 - [ ] Test cross-tenant data access prevention
-- [ ] Validate permission enforcement
-- [ ] Test feature flag security
-- [ ] Test authentication security
-- [ ] Validate React 19 form security
-- [ ] Check for common vulnerabilities
-- [ ] Audit logging verification
+- [ ] Validate permission enforcement throughout the application
+- [ ] Test role-based access security for all features
+- [ ] Test feature flag security across user types
+- [ ] Test authentication security and role changes
+- [ ] Validate React 19 form security with permission checks
+- [ ] Check for common vulnerabilities in routing and components
+- [ ] Audit logging verification for all user actions
 - [ ] Test combined permission + feature scenarios
+- [ ] Validate proper access control throughout the single dashboard
 
 ## 🚀 Phase 9: Deployment Preparation (Week 6-7)
 
@@ -347,23 +386,69 @@ resources/js/modules/[module-name]/
 
 ## 📝 Key Implementation Details
 
-### **Tenant Resolution Logic**
-```php
-// Middleware resolves tenant from subdomain
-$subdomain = request()->getHost();
-$tenant = Tenant::where('subdomain', $subdomain)->firstOrFail();
-app()->instance('tenant', $tenant);
+### **Single Dashboard Routing Strategy**
+```typescript
+// app.tsx - Single dashboard with role-aware content
+function App() {
+  const { user } = useAuth();
+  
+  if (!user) return <AuthApp />;
+  
+  return (
+    <DashboardLayout>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/users" element={<Users />} />
+        <Route path="/dashboard/settings" element={<Settings />} />
+        <Route path="/dashboard/billing" element={<Billing />} />
+      </Routes>
+    </DashboardLayout>
+  );
+}
 ```
 
-### **Permission Check Example**
+### **Permission-Based Route Protection**
 ```php
-// In controller
-$this->authorize('users.view');
+// routes/web.php - Single route file with permission middleware
+Route::middleware(['auth', 'tenant'])->prefix('dashboard')->group(function () {
+    Route::get('/', [DashboardController::class, 'index']);
+    
+    Route::middleware('permission:users.view')->group(function () {
+        Route::resource('users', UserController::class);
+    });
+    
+    Route::middleware('permission:settings.view')->group(function () {
+        Route::get('settings', [SettingsController::class, 'index']);
+    });
+    
+    Route::middleware('permission:billing.view')->group(function () {
+        Route::resource('billing', BillingController::class);
+    });
+});
+```
 
-// In blade/React
-@can('users.create')
-  <CreateButton />
-@endcan
+### **Role-Aware Component Strategy**
+```typescript
+// Single component that adapts to user permissions
+import { DataTable } from '@/shared/components';
+
+function UserList() {
+  const { can } = usePermissions();
+  const { user } = useAuth();
+  
+  return (
+    <DataTable 
+      data={users} 
+      actions={
+        <div>
+          {can('users.edit') && <EditButton />}
+          {can('users.delete') && <DeleteButton />}
+          {user.hasRole('admin') && <AdminActions />}
+        </div>
+      }
+    />
+  );
+}
 ```
 
 ### **Module Service Provider Template**

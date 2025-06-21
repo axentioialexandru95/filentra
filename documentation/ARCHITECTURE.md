@@ -45,7 +45,9 @@ Filentra/
 │   └── js/
 │       ├── core/                  # Core frontend utilities
 │       ├── modules/               # Module-specific frontend
-│       ├── shared/                # Shared components
+│       ├── shared/                # Shared components & layouts
+│       ├── components/            # Role-aware UI components
+│       ├── layouts/               # Adaptive layouts
 │       └── app.tsx                # Main app entry
 ├── database/
 │   ├── migrations/                # All migrations
@@ -74,6 +76,87 @@ resources/js/modules/[module-name]/
 ├── pages/                         # Module pages
 ├── hooks/                         # Module hooks
 └── types.ts                       # Module types
+```
+
+## Single Panel with Role-Based Content
+
+### **Strategy: Unified Dashboard with Adaptive Content**
+
+We use a single dashboard interface that adapts its content, navigation, and functionality based on the user's role and permissions:
+
+```
+/dashboard/*     - Single entry point for all users
+├── Content adapts based on user role
+├── Navigation shows relevant options
+├── Features enabled by permissions
+└── UI components render contextually
+```
+
+### **Benefits of Single Panel**
+
+1. **Simpler Architecture**: One codebase, one routing system
+2. **Easier Maintenance**: Changes apply universally
+3. **Better User Experience**: Consistent interface, smooth role transitions
+4. **Reduced Complexity**: No route-based panel switching
+5. **Natural Role Progression**: Users see more features as roles expand
+
+### **Role-Aware Components**
+
+```typescript
+// Components adapt based on user context
+function UserList() {
+  const { user } = useAuth();
+  const { can } = usePermissions();
+  
+  return (
+    <DataTable 
+      data={users}
+      columns={getUserColumns(user.role)}
+      actions={can('users.manage') ? <AdminActions /> : <ViewActions />}
+    />
+  );
+}
+
+function Navigation() {
+  const { user } = useAuth();
+  
+  return (
+    <nav>
+      {getNavigationItems(user.role, user.permissions).map(item => (
+        <NavItem key={item.key} {...item} />
+      ))}
+    </nav>
+  );
+}
+```
+
+### **Adaptive Layout System**
+
+```typescript
+// Single layout that adapts to user context
+function DashboardLayout({ children }) {
+  const { user } = useAuth();
+  
+  return (
+    <div className="dashboard">
+      <Sidebar navigation={getNavigation(user)} />
+      <Header user={user} />
+      <main>{children}</main>
+    </div>
+  );
+}
+```
+
+### **Implementation Structure**
+
+```
+app/Http/Controllers/Dashboard/    # All dashboard controllers
+├── DashboardController.php        # Main dashboard
+├── UserController.php             # User management (role-aware)
+├── SettingsController.php         # Settings (role-aware)
+└── ReportsController.php          # Reports (role-aware)
+
+routes/web.php                     # Single route file with middleware
 ```
 
 ## Multi-Tenancy (Simplified)
