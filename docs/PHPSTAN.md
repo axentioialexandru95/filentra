@@ -142,13 +142,28 @@ composer phpstan:baseline
 # This will create a new baseline with remaining errors
 ```
 
-## Best Practices
+### Best Practices
 
-### 1. Run PHPStan in CI/CD
-Add to your GitHub Actions or similar:
-```yaml
-- name: Run PHPStan
-  run: composer phpstan
+### 1. Run PHPStan in CI/CD ✅
+PHPStan is already integrated in GitHub Actions workflows:
+
+- **lint.yml**: Runs PHPStan on every push/PR
+- **phpstan.yml**: Dedicated PHPStan workflow with caching
+- **code-quality.yml**: Comprehensive quality checks including PHPStan
+
+The workflows automatically:
+- Run standard analysis (baseline-aware) on all commits
+- Run full analysis (all errors) on pull requests
+- Cache results for faster execution
+- Provide detailed error reporting
+
+To manually trigger workflows:
+```bash
+# Push changes to trigger workflows
+git push origin feature-branch
+
+# Or create a pull request
+gh pr create --title "Feature" --body "Description"
 ```
 
 ### 2. Fix New Errors Immediately
@@ -222,9 +237,53 @@ Validate your configuration:
 ./vendor/bin/phpstan analyse --configuration=phpstan.neon --dry-run
 ```
 
+## CI/CD Integration
+
+### GitHub Workflows
+
+Three workflows are configured for different purposes:
+
+#### 1. `lint.yml` - Quick Linting
+- Runs on every push/PR
+- Includes PHP Pint, ESLint, Prettier, and PHPStan
+- Fast execution for immediate feedback
+
+#### 2. `phpstan.yml` - Dedicated Static Analysis
+- Comprehensive PHPStan analysis
+- Caches results for performance
+- Runs full analysis on pull requests
+
+#### 3. `code-quality.yml` - Complete Quality Suite
+- PHP quality checks (Pint + PHPStan)
+- Frontend quality checks (TypeScript + ESLint + Prettier)
+- Security audits
+- Test coverage requirements
+
+### Workflow Configuration
+
+```yaml
+# Example PHPStan step in GitHub Actions
+- name: Run PHPStan Analysis
+  run: composer phpstan
+
+- name: Cache PHPStan Results
+  uses: actions/cache@v4
+  with:
+    path: .phpstan-cache
+    key: ${{ runner.os }}-phpstan-${{ github.sha }}
+```
+
+### Status Checks
+
+All workflows are configured as required status checks, meaning:
+- Pull requests cannot be merged if PHPStan fails
+- New errors must be fixed before merging
+- Baseline errors don't block merges
+
 ## Resources
 
 - [PHPStan Documentation](https://phpstan.org/user-guide/getting-started)
 - [Larastan Documentation](https://github.com/larastan/larastan)
 - [PHPStan Rule Levels](https://phpstan.org/user-guide/rule-levels)
 - [Writing Custom Rules](https://phpstan.org/developing-extensions/extension-types)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)

@@ -1,0 +1,231 @@
+name: code-quality
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  php-quality:
+    runs-on: ubuntu-latest
+    name: PHP Code Quality
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+          extensions: bcmath, ctype, fileinfo, json, mbstring, openssl, pdo, tokenizer, xml
+          coverage: none
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Cache PHPStan Results
+        uses: actions/cache@v4
+        with:
+          path: .phpstan-cache
+          key: ${{ runner.os }}-phpstan-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-phpstan-
+
+      - name: Run Laravel Pint (Code Style)
+        run: vendor/bin/pint --test
+
+      - name: Run PHPStan (Static Analysis)
+        run: composer phpstan
+
+      - name: Run PHPStan Full Check (PR only)
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "🔍 Running comprehensive PHPStan analysis..."
+          if composer phpstan:check; then
+            echo "✅ No errors found in full analysis!"
+          else
+            echo "⚠️ Some errors found - these may include baseline errors"
+            echo "💡 New errors should be fixed, baseline errors can be addressed gradually"
+          fi
+        continue-on-error: true
+
+  frontend-quality:
+    runs-on: ubuntu-latest
+    name: Frontend Code Quality
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Type Check
+        run: npm run types
+
+      - name: Lint Check
+        run: npm run lint
+
+      - name: Format Check
+        run: npm run format:check
+
+  tests:
+    runs-on: ubuntu-latest
+    name: Run Tests
+    needs: [php-quality, frontend-quality]
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+          extensions: bcmath, ctype, fileinfo, json, mbstring, openssl, pdo, pdo_mysql, tokenizer, xml
+          coverage: xdebug
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Build Assets
+        run: npm run build
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Create Database
+        run: |
+          mysql -h 127.0.0.1 -u root -ppassword -e "CREATE DATABASE IF NOT EXISTS testing;"
+
+      - name: Run Database Migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: root
+          DB_PASSWORD: password
+
+      - name: Run PHP Tests
+        run: ./vendor/bin/pest --coverage --min=80
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: root
+          DB_PASSWORD: password
+
+      - name: Run JavaScript Tests
+        run: npm test
+
+  security:
+    runs-on: ubuntu-latest
+    name: Security Audit
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          npm ci
+
+      - name: PHP Security Audit
+        run: composer audit
+
+      - name: NPM Security Audit
+        run: npm audit --audit-level moderate
+
+      - name: Check for Sensitive Files
+        run: |
+          if find . -name "*.env*" -not -name "*.example" -not -path "./vendor/*" -not -path "./node_modules/*" | grep -q .; then
+            echo "❌ Environment files found in repository!"
+            find . -name "*.env*" -not -name "*.example" -not -path "./vendor/*" -not -path "./node_modules/*"
+            exit 1
+          else
+            echo "✅ No sensitive environment files found"
+          fi
