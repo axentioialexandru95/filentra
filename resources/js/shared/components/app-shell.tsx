@@ -1,5 +1,5 @@
-import { SidebarProvider } from '@/shared/components/ui/sidebar';
 import { SharedData } from '@/core/types';
+import { SidebarProvider } from '@/shared/components/ui/sidebar';
 import { usePage } from '@inertiajs/react';
 
 interface AppShellProps {

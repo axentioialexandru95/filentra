@@ -1,6 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import { useInitials } from '@/core/hooks/use-initials';
 import { type User } from '@/core/types';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 
 export function UserInfo({ user, showEmail = false }: { user: User; showEmail?: boolean }) {
     const getInitials = useInitials();

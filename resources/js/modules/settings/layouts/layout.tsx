@@ -1,8 +1,8 @@
+import { cn } from '@/core/lib/utils';
+import { type NavItem } from '@/core/types';
 import Heading from '@/shared/components/heading';
 import { Button } from '@/shared/components/ui/button';
 import { Separator } from '@/shared/components/ui/separator';
-import { cn } from '@/core/lib/utils';
-import { type NavItem } from '@/core/types';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
 

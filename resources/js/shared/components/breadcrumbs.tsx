@@ -1,5 +1,5 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/shared/components/ui/breadcrumb';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/core/types';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/shared/components/ui/breadcrumb';
 import { Link } from '@inertiajs/react';
 import { Fragment } from 'react';
 
