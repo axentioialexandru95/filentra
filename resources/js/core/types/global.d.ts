@@ -11,7 +11,6 @@ declare global {
     }
 }
 
-// Disable PropTypes in favor of TypeScript
 declare module 'prop-types' {
     const PropTypes: unknown;
     export = PropTypes;
