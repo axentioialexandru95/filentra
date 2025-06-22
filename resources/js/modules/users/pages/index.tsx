@@ -1,3 +1,4 @@
+import { getInitials } from '@/core/lib/utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
@@ -43,25 +44,19 @@ interface UsersIndexProps {
 
 export default function UsersIndex({ data: users, stats, filters }: UsersIndexProps) {
     const [search, setSearch] = useState(filters.search || '');
-    const [status, setStatus] = useState(filters.status || '');
+    const [status, setStatus] = useState(filters.status || 'all');
 
     const handleSearch = () => {
-        router.get('/users', { search, status }, { preserveState: true, replace: true });
+        const searchParams: { search?: string; status?: string } = {};
+        if (search) searchParams.search = search;
+        if (status && status !== 'all') searchParams.status = status;
+        router.get('/users', searchParams, { preserveState: true, replace: true });
     };
 
     const handleReset = () => {
         setSearch('');
-        setStatus('');
+        setStatus('all');
         router.get('/users', {}, { preserveState: true, replace: true });
-    };
-
-    const getInitials = (name: string) => {
-        return name
-            .split(' ')
-            .map((n) => n[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
     };
 
     const formatDate = (dateString: string) => {
@@ -76,7 +71,7 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Users" />
 
-            <div className="space-y-6">
+            <div className="space-y-6 p-6">
                 {/* Stats Cards */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card>
@@ -141,7 +136,7 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
                                     <SelectValue placeholder="Filter by status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">All Status</SelectItem>
+                                    <SelectItem value="all">All Status</SelectItem>
                                     <SelectItem value="verified">Verified</SelectItem>
                                     <SelectItem value="unverified">Unverified</SelectItem>
                                 </SelectContent>

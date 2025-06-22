@@ -15,3 +15,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+
+// Include users routes
+require base_path('app/Modules/Users/routes.php');
+
+// Include users routes
+require base_path('app/Modules/Users/routes.php');

@@ -72,52 +72,52 @@
         ],
         "test": [
             "@php artisan config:clear --ansi",
-            "XDEBUG_MODE=off php artisan test"
+            "php artisan test"
         ],
         "phpstan": [
-            "XDEBUG_MODE=off ./vendor/bin/phpstan analyse --memory-limit=1G"
+            "./vendor/bin/phpstan analyse --memory-limit=1G"
         ],
         "phpstan:baseline": [
-            "XDEBUG_MODE=off ./vendor/bin/phpstan analyse --generate-baseline"
+            "./vendor/bin/phpstan analyse --generate-baseline"
         ],
         "phpstan:clear": [
-            "XDEBUG_MODE=off ./vendor/bin/phpstan clear-result-cache"
+            "./vendor/bin/phpstan clear-result-cache"
         ],
         "pint": [
-            "XDEBUG_MODE=off ./vendor/bin/pint"
+            "./vendor/bin/pint"
         ],
         "phpcs": [
-            "XDEBUG_MODE=off ./vendor/bin/phpcs"
+            "./vendor/bin/phpcs"
         ],
         "phpcbf": [
-            "XDEBUG_MODE=off ./vendor/bin/phpcbf"
+            "./vendor/bin/phpcbf"
         ],
         "quality:check": [
             "@putenv COMPOSER_PROCESS_TIMEOUT=0",
             "@php artisan config:clear --ansi",
-            "XDEBUG_MODE=off ./vendor/bin/phpstan analyse --memory-limit=1G",
-            "XDEBUG_MODE=off ./vendor/bin/phpcs --report=summary",
-            "XDEBUG_MODE=off php artisan test"
+            "./vendor/bin/phpstan analyse --memory-limit=1G",
+            "./vendor/bin/phpcs --report=summary",
+            "php artisan test"
         ],
         "quality:fix": [
             "@putenv COMPOSER_PROCESS_TIMEOUT=0",
             "@php artisan config:clear --ansi",
-            "XDEBUG_MODE=off ./vendor/bin/pint",
-            "XDEBUG_MODE=off ./vendor/bin/phpcbf",
-            "XDEBUG_MODE=off ./vendor/bin/phpstan analyse --memory-limit=1G",
-            "XDEBUG_MODE=off ./vendor/bin/phpcs --report=summary",
-            "XDEBUG_MODE=off php artisan test"
+            "./vendor/bin/pint",
+            "./vendor/bin/phpcbf",
+            "./vendor/bin/phpstan analyse --memory-limit=1G",
+            "./vendor/bin/phpcs --report=summary",
+            "php artisan test"
         ],
         "quality:all": [
             "@quality:fix"
         ],
         "cs:check": [
-            "XDEBUG_MODE=off ./vendor/bin/phpcs --report=summary",
-            "XDEBUG_MODE=off ./vendor/bin/pint --test"
+            "./vendor/bin/phpcs --report=summary",
+            "./vendor/bin/pint --test"
         ],
         "cs:fix": [
-            "XDEBUG_MODE=off ./vendor/bin/phpcbf",
-            "XDEBUG_MODE=off ./vendor/bin/pint"
+            "./vendor/bin/phpcbf",
+            "./vendor/bin/pint"
         ]
     },
     "extra": {

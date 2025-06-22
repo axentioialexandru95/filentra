@@ -1,3 +1,4 @@
+import { getInitials } from '@/core/lib/utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link } from '@inertiajs/react';
 
@@ -15,28 +16,44 @@ interface UserShowProps {
 }
 
 export default function ShowUser({ item: user }: UserShowProps) {
+    if (!user) {
+        return (
+            <AppLayout
+                breadcrumbs={[
+                    { title: 'Users', href: '/users' },
+                    { title: 'User Not Found', href: '#' },
+                ]}
+            >
+                <Head title="User Not Found" />
+                <div className="py-12 text-center">
+                    <h2 className="text-2xl font-semibold">User not found</h2>
+                    <p className="mt-2 text-muted-foreground">The user you're looking for doesn't exist.</p>
+                    <Button asChild className="mt-4">
+                        <Link href="/users">Back to Users</Link>
+                    </Button>
+                </div>
+            </AppLayout>
+        );
+    }
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Users',
             href: '/users',
         },
         {
-            title: user.name,
+            title: user.name || 'Unknown User',
             href: `/users/${user.id}`,
         },
     ];
 
-    const getInitials = (name: string) => {
-        return name
-            .split(' ')
-            .map((n) => n[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
-    };
+    const formatDate = (dateString: string | null | undefined) => {
+        if (!dateString) return 'Not available';
 
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return 'Invalid date';
+
+        return date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -47,9 +64,9 @@ export default function ShowUser({ item: user }: UserShowProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`User - ${user.name}`} />
+            <Head title={`${user.name} - Users`} />
 
-            <div className="mx-auto max-w-4xl space-y-6">
+            <div className="space-y-6">
                 {/* User Header */}
                 <Card>
                     <CardHeader>
@@ -59,8 +76,8 @@ export default function ShowUser({ item: user }: UserShowProps) {
                                     <AvatarFallback className="text-lg">{getInitials(user.name)}</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <CardTitle className="text-2xl">{user.name}</CardTitle>
-                                    <CardDescription className="text-base">{user.email}</CardDescription>
+                                    <CardTitle className="text-2xl">{user.name || 'Unknown User'}</CardTitle>
+                                    <CardDescription>{user.email || 'No email provided'}</CardDescription>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -76,70 +93,64 @@ export default function ShowUser({ item: user }: UserShowProps) {
                 </Card>
 
                 {/* User Details */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>User Information</CardTitle>
-                        <CardDescription>Detailed information about this user</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-muted-foreground">Full Name</label>
-                                <p className="text-base">{user.name}</p>
+                <div className="grid gap-6 md:grid-cols-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>User Information</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div>
+                                <dt className="text-sm font-medium text-muted-foreground">Full Name</dt>
+                                <dd className="text-sm">{user.name || 'Not provided'}</dd>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-muted-foreground">Email Address</label>
-                                <p className="text-base">{user.email}</p>
+                            <Separator />
+                            <div>
+                                <dt className="text-sm font-medium text-muted-foreground">Email Address</dt>
+                                <dd className="text-sm">{user.email || 'Not provided'}</dd>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-muted-foreground">Email Status</label>
-                                <Badge variant={user.email_verified_at ? 'default' : 'secondary'}>
-                                    {user.email_verified_at ? 'Verified' : 'Unverified'}
-                                </Badge>
+                            <Separator />
+                            <div>
+                                <dt className="text-sm font-medium text-muted-foreground">Status</dt>
+                                <dd className="text-sm">
+                                    <Badge variant={user.email_verified_at ? 'default' : 'secondary'}>
+                                        {user.email_verified_at ? 'Verified' : 'Unverified'}
+                                    </Badge>
+                                </dd>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-muted-foreground">User ID</label>
-                                <p className="font-mono text-base">#{user.id}</p>
+                            <Separator />
+                            <div>
+                                <dt className="text-sm font-medium text-muted-foreground">User ID</dt>
+                                <dd className="font-mono text-sm">{user.id || 'Unknown'}</dd>
                             </div>
-                        </div>
+                        </CardContent>
+                    </Card>
 
-                        <Separator />
-
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-muted-foreground">Account Created</label>
-                                <p className="text-base">{formatDate(user.created_at)}</p>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Account Activity</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div>
+                                <dt className="text-sm font-medium text-muted-foreground">Joined</dt>
+                                <dd className="text-sm">{formatDate(user.created_at)}</dd>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-muted-foreground">Last Updated</label>
-                                <p className="text-base">{formatDate(user.updated_at)}</p>
+                            <Separator />
+                            <div>
+                                <dt className="text-sm font-medium text-muted-foreground">Last Updated</dt>
+                                <dd className="text-sm">{formatDate(user.updated_at)}</dd>
                             </div>
                             {user.email_verified_at && (
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-muted-foreground">Email Verified</label>
-                                    <p className="text-base">{formatDate(user.email_verified_at)}</p>
-                                </div>
+                                <>
+                                    <Separator />
+                                    <div>
+                                        <dt className="text-sm font-medium text-muted-foreground">Email Verified</dt>
+                                        <dd className="text-sm">{formatDate(user.email_verified_at)}</dd>
+                                    </div>
+                                </>
                             )}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Actions */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Actions</CardTitle>
-                        <CardDescription>Available actions for this user</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-wrap gap-4">
-                            <Button variant="outline" asChild>
-                                <Link href={`/users/${user.id}/edit`}>Edit Profile</Link>
-                            </Button>
-                            {!user.email_verified_at && <Button variant="outline">Resend Verification Email</Button>}
-                            <Button variant="outline">Reset Password</Button>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </AppLayout>
     );
