@@ -1,7 +1,7 @@
 import { tenantRoute } from '@/core/lib/tenant-utils';
 import { getInitials } from '@/core/lib/utils';
 import { type BreadcrumbItem } from '@/core/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar';
@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Input } from '@/shared/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 import AppLayout from '@/shared/layouts/app-layout';
+import { UserCheck } from 'lucide-react';
 
 import { type User } from '../types';
 
@@ -39,6 +40,8 @@ interface UsersIndexProps {
 export default function UsersIndex({ data: users, stats, filters }: UsersIndexProps) {
     const [search, setSearch] = useState(filters.search || '');
     const [status, setStatus] = useState(filters.status || 'all');
+    const { props } = usePage();
+    const currentUser = props.auth?.user as any;
 
     const usersIndexRoute = tenantRoute('users.index');
     const usersCreateRoute = tenantRoute('users.create');
@@ -69,6 +72,40 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
 
     const getUserEditRoute = (userId: number) => {
         return tenantRoute('users.edit', { user: userId });
+    };
+
+    const handleImpersonate = (userId: number) => {
+        router.post(
+            `/impersonate/${userId}`,
+            {},
+            {
+                onSuccess: () => {
+                    // Page will redirect on success
+                },
+                onError: (errors) => {
+                    console.error('Impersonation failed:', errors);
+                },
+            },
+        );
+    };
+
+    const canImpersonateUser = (user: User) => {
+        // Check if current user is superadmin
+        if (!currentUser?.is_superadmin) {
+            return false;
+        }
+
+        // Cannot impersonate yourself
+        if (user.id === currentUser.id) {
+            return false;
+        }
+
+        // Cannot impersonate other superadmins
+        if (user.role?.slug === 'superadmin') {
+            return false;
+        }
+
+        return true;
     };
 
     const formatDate = (dateString: string) => {
@@ -207,6 +244,16 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
                                                             <Button variant="outline" size="sm" asChild>
                                                                 <Link href={getUserEditRoute(user.id)}>Edit</Link>
                                                             </Button>
+                                                            {canImpersonateUser(user) && (
+                                                                <Button
+                                                                    variant="outline"
+                                                                    size="sm"
+                                                                    onClick={() => handleImpersonate(user.id)}
+                                                                    title={`Impersonate ${user.name}`}
+                                                                >
+                                                                    <UserCheck className="h-4 w-4" />
+                                                                </Button>
+                                                            )}
                                                         </div>
                                                     </td>
                                                 </tr>

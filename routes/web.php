@@ -37,3 +37,23 @@ Route::middleware(['auth', 'verified', 'tenant'])->group(function () {
         return Inertia::render('modules/settings/pages/appearance');
     })->name('appearance');
 });
+
+// Superadmin only routes (no tenant context needed)
+Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
+    // Tenant Management
+    Route::get('tenants', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'index'])->name('tenants.index');
+    Route::get('tenants/create', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'create'])->name('tenants.create');
+    Route::post('tenants', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'store'])->name('tenants.store');
+    Route::get('tenants/{tenant}', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'show'])->name('tenants.show');
+    Route::get('tenants/{tenant}/edit', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'edit'])->name('tenants.edit');
+    Route::patch('tenants/{tenant}', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'update'])->name('tenants.update');
+    Route::delete('tenants/{tenant}', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'destroy'])->name('tenants.destroy');
+    Route::patch('tenants/{tenant}/toggle-status', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'toggleStatus'])->name('tenants.toggle-status');
+});
+
+// Impersonation routes (permission-based)
+Route::middleware(['auth', 'verified', 'permission:impersonate_users'])->group(function () {
+    Route::post('impersonate/{user}', [\App\Http\Controllers\ImpersonationController::class, 'start'])->name('impersonate.start');
+    Route::post('impersonate/stop', [\App\Http\Controllers\ImpersonationController::class, 'stop'])->name('impersonate.stop');
+    Route::get('impersonate/status', [\App\Http\Controllers\ImpersonationController::class, 'status'])->name('impersonate.status');
+});

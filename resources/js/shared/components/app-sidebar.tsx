@@ -1,6 +1,5 @@
 import { type NavItem } from '@/core/types';
 import { NavUser } from '@/modules/users/components/nav-user';
-import { NavFooter } from '@/shared/components/nav-footer';
 import { NavMain } from '@/shared/components/nav-main';
 import {
     Sidebar,
@@ -11,24 +10,14 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/shared/components/ui/sidebar';
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { Building, LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
-
 export function AppSidebar() {
+    const { props } = usePage();
+    const user = props.auth?.user as any;
+
     const mainNavItems: NavItem[] = [
         {
             title: 'Dashboard',
@@ -41,6 +30,15 @@ export function AppSidebar() {
             icon: Users,
         },
     ];
+
+    // Add tenant management for superadmins
+    if (user?.role?.slug === 'superadmin') {
+        mainNavItems.push({
+            title: 'Tenants',
+            href: '/tenants',
+            icon: Building,
+        });
+    }
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -61,7 +59,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
