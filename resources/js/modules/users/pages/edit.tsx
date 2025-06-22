@@ -1,3 +1,4 @@
+import { tenantRoute } from '@/core/lib/tenant-utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
@@ -11,83 +12,80 @@ import AppLayout from '@/shared/layouts/app-layout';
 
 import { type User } from '../types';
 
-interface UserEditProps {
-    item: User;
+interface EditUserProps {
+    user: User;
 }
 
-export default function EditUser({ item: user }: UserEditProps) {
+export default function EditUser({ user }: EditUserProps) {
+    const usersIndexRoute = tenantRoute('users.index');
+    const usersShowRoute = tenantRoute('users.show', { user: user.id });
+    const usersUpdateRoute = tenantRoute('users.update', { user: user.id });
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Users',
-            href: '/users',
+            href: usersIndexRoute,
         },
         {
             title: user.name,
-            href: `/users/${user.id}`,
+            href: usersShowRoute,
         },
         {
             title: 'Edit',
-            href: `/users/${user.id}/edit`,
+            href: tenantRoute('users.edit', { user: user.id }),
         },
     ];
 
     const { data, setData, patch, processing, errors } = useForm({
-        name: user.name,
-        email: user.email,
+        name: user.name || '',
+        email: user.email || '',
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route('users.update', { user: user.id }));
+        patch(usersUpdateRoute);
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Edit User - ${user.name}`} />
+            <Head title={`Edit ${user.name} - Users`} />
 
-            <div className="mx-auto max-w-2xl">
+            <div className="mx-auto max-w-2xl space-y-6">
                 <Card>
                     <CardHeader>
                         <CardTitle>Edit User</CardTitle>
-                        <CardDescription>Update user information</CardDescription>
+                        <CardDescription>Update the user's information below.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={submit} className="space-y-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="name">Full Name</Label>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    value={data.name}
-                                    onChange={(e) => setData('name', e.target.value)}
-                                    placeholder="Enter full name"
-                                    required
-                                    autoComplete="name"
-                                />
-                                <InputError message={errors.name} />
+                            <div className="grid gap-6 md:grid-cols-2">
+                                <div className="space-y-2">
+                                    <Label htmlFor="name">Full Name</Label>
+                                    <Input
+                                        id="name"
+                                        type="text"
+                                        value={data.name}
+                                        onChange={(e) => setData('name', e.target.value)}
+                                        required
+                                        autoFocus
+                                    />
+                                    <InputError message={errors.name} />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email Address</Label>
+                                    <Input id="email" type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} required />
+                                    <InputError message={errors.email} />
+                                </div>
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email Address</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    value={data.email}
-                                    onChange={(e) => setData('email', e.target.value)}
-                                    placeholder="Enter email address"
-                                    required
-                                    autoComplete="email"
-                                />
-                                <InputError message={errors.email} />
-                            </div>
-
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center justify-end space-x-4">
+                                <Button variant="outline" asChild>
+                                    <Link href={usersShowRoute}>Cancel</Link>
+                                </Button>
                                 <Button type="submit" disabled={processing}>
                                     {processing ? 'Updating...' : 'Update User'}
-                                </Button>
-                                <Button variant="outline" asChild>
-                                    <Link href={`/users/${user.id}`}>Cancel</Link>
                                 </Button>
                             </div>
                         </form>

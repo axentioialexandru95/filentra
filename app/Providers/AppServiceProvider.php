@@ -11,7 +11,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register default tenant bindings to prevent binding resolution errors
+        $this->app->instance('current_tenant', null);
+        $this->app->instance('current_tenant_id', null);
     }
 
     /**

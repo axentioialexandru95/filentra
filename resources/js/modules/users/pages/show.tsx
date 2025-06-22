@@ -1,3 +1,4 @@
+import { tenantRoute } from '@/core/lib/tenant-utils';
 import { getInitials } from '@/core/lib/utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link } from '@inertiajs/react';
@@ -12,15 +13,18 @@ import AppLayout from '@/shared/layouts/app-layout';
 import { type User } from '../types';
 
 interface UserShowProps {
-    item: User;
+    user: User;
 }
 
-export default function ShowUser({ item: user }: UserShowProps) {
+export default function ShowUser({ user }: UserShowProps) {
+    const usersIndexRoute = tenantRoute('users.index');
+    const userEditRoute = tenantRoute('users.edit', { user: user.id });
+
     if (!user) {
         return (
             <AppLayout
                 breadcrumbs={[
-                    { title: 'Users', href: '/users' },
+                    { title: 'Users', href: usersIndexRoute },
                     { title: 'User Not Found', href: '#' },
                 ]}
             >
@@ -29,7 +33,7 @@ export default function ShowUser({ item: user }: UserShowProps) {
                     <h2 className="text-2xl font-semibold">User not found</h2>
                     <p className="mt-2 text-muted-foreground">The user you're looking for doesn't exist.</p>
                     <Button asChild className="mt-4">
-                        <Link href="/users">Back to Users</Link>
+                        <Link href={usersIndexRoute}>Back to Users</Link>
                     </Button>
                 </div>
             </AppLayout>
@@ -39,11 +43,11 @@ export default function ShowUser({ item: user }: UserShowProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Users',
-            href: '/users',
+            href: usersIndexRoute,
         },
         {
             title: user.name || 'Unknown User',
-            href: `/users/${user.id}`,
+            href: tenantRoute('users.show', { user: user.id }),
         },
     ];
 
@@ -82,10 +86,10 @@ export default function ShowUser({ item: user }: UserShowProps) {
                             </div>
                             <div className="flex items-center gap-2">
                                 <Button variant="outline" asChild>
-                                    <Link href={`/users/${user.id}/edit`}>Edit User</Link>
+                                    <Link href={userEditRoute}>Edit User</Link>
                                 </Button>
                                 <Button variant="outline" asChild>
-                                    <Link href="/users">Back to Users</Link>
+                                    <Link href={usersIndexRoute}>Back to Users</Link>
                                 </Button>
                             </div>
                         </div>

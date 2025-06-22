@@ -1,3 +1,4 @@
+import { tenantRoute } from '@/core/lib/tenant-utils';
 import { getInitials } from '@/core/lib/utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link, router } from '@inertiajs/react';
@@ -12,13 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import AppLayout from '@/shared/layouts/app-layout';
 
 import { type User } from '../types';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Users',
-        href: '/users',
-    },
-];
 
 interface UsersIndexProps {
     data: {
@@ -46,17 +40,35 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
     const [search, setSearch] = useState(filters.search || '');
     const [status, setStatus] = useState(filters.status || 'all');
 
+    const usersIndexRoute = tenantRoute('users.index');
+    const usersCreateRoute = tenantRoute('users.create');
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Users',
+            href: usersIndexRoute,
+        },
+    ];
+
     const handleSearch = () => {
         const searchParams: { search?: string; status?: string } = {};
         if (search) searchParams.search = search;
         if (status && status !== 'all') searchParams.status = status;
-        router.get('/users', searchParams, { preserveState: true, replace: true });
+        router.get(usersIndexRoute, searchParams, { preserveState: true, replace: true });
     };
 
     const handleReset = () => {
         setSearch('');
         setStatus('all');
-        router.get('/users', {}, { preserveState: true, replace: true });
+        router.get(usersIndexRoute, {}, { preserveState: true, replace: true });
+    };
+
+    const getUserShowRoute = (userId: number) => {
+        return tenantRoute('users.show', { user: userId });
+    };
+
+    const getUserEditRoute = (userId: number) => {
+        return tenantRoute('users.edit', { user: userId });
     };
 
     const formatDate = (dateString: string) => {
@@ -118,7 +130,7 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
                                 <CardDescription>Manage user accounts and permissions</CardDescription>
                             </div>
                             <Button asChild>
-                                <Link href="/users/create">Add User</Link>
+                                <Link href={usersCreateRoute}>Add User</Link>
                             </Button>
                         </div>
                     </CardHeader>
@@ -190,10 +202,10 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
                                                     <td className="px-4 py-3">
                                                         <div className="flex items-center gap-2">
                                                             <Button variant="outline" size="sm" asChild>
-                                                                <Link href={`/users/${user.id}`}>View</Link>
+                                                                <Link href={getUserShowRoute(user.id)}>View</Link>
                                                             </Button>
                                                             <Button variant="outline" size="sm" asChild>
-                                                                <Link href={`/users/${user.id}/edit`}>Edit</Link>
+                                                                <Link href={getUserEditRoute(user.id)}>Edit</Link>
                                                             </Button>
                                                         </div>
                                                     </td>
@@ -216,7 +228,7 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => router.get(`/users?page=${users.current_page - 1}`, { search, status })}
+                                            onClick={() => router.get(`${usersIndexRoute}?page=${users.current_page - 1}`, { search, status })}
                                         >
                                             Previous
                                         </Button>
@@ -228,7 +240,7 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => router.get(`/users?page=${users.current_page + 1}`, { search, status })}
+                                            onClick={() => router.get(`${usersIndexRoute}?page=${users.current_page + 1}`, { search, status })}
                                         >
                                             Next
                                         </Button>

@@ -1,3 +1,4 @@
+import { tenantRoute } from '@/core/lib/tenant-utils';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Link } from '@inertiajs/react';
@@ -7,10 +8,23 @@ import { ArrowRight, Moon, Sun } from 'lucide-react';
 interface HeaderProps {
     isDark: boolean;
     toggleTheme: () => void;
-    auth: { user?: object | null };
+    auth: {
+        user?: {
+            name: string;
+            email: string;
+        };
+    };
 }
 
 export function Header({ isDark, toggleTheme, auth }: HeaderProps) {
+    // For demo purposes, redirect to the first available tenant
+    // 1. Check if user has a tenant assigned
+    // 2. If user has multiple tenants, show a selection
+    // 3. Use the user's last accessed tenant
+    const getDashboardUrl = () => {
+        return tenantRoute('dashboard');
+    };
+
     return (
         <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
             <div className="container mx-auto px-6 py-4">
@@ -53,7 +67,7 @@ export function Header({ isDark, toggleTheme, auth }: HeaderProps) {
                         </motion.div>
 
                         {auth.user ? (
-                            <Link href={route('dashboard')}>
+                            <Link href={getDashboardUrl()}>
                                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                     <Button className="group shadow-lg transition-all duration-300 hover:shadow-xl">
                                         Dashboard

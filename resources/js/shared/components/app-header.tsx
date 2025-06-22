@@ -1,4 +1,5 @@
 import { useInitials } from '@/core/hooks/use-initials';
+import { tenantRoute } from '@/core/lib/tenant-utils';
 import { cn } from '@/core/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/core/types';
 import { UserMenuContent } from '@/modules/users/components/user-menu-content';
@@ -14,19 +15,6 @@ import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Users',
-        href: '/users',
-        icon: Users,
-    },
-];
 
 const rightNavItems: NavItem[] = [
     {
@@ -51,6 +39,22 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: tenantRoute('dashboard'),
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Users',
+            href: tenantRoute('users.index'),
+            icon: Users,
+        },
+    ];
+
+    const dashboardUrl = tenantRoute('dashboard');
+
     return (
         <>
             <div className="border-b border-sidebar-border/80">
@@ -99,7 +103,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         </Sheet>
                     </div>
 
-                    <Link href="/dashboard" prefetch className="flex items-center space-x-2">
+                    <Link href={dashboardUrl} prefetch className="flex items-center space-x-2">
                         <AppLogo />
                     </Link>
 

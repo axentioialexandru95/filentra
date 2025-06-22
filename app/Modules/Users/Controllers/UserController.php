@@ -72,7 +72,7 @@ class UserController extends Controller
     public function show(User $user): Response
     {
         return Inertia::render('modules/users/pages/show', [
-            'item' => new UserResource($user),
+            'user' => new UserResource($user),
         ]);
     }
 
@@ -82,7 +82,7 @@ class UserController extends Controller
     public function edit(User $user): Response
     {
         return Inertia::render('modules/users/pages/edit', [
-            'item' => new UserResource($user),
+            'user' => new UserResource($user),
         ]);
     }
 
