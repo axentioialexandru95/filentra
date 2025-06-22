@@ -80,6 +80,9 @@
         ],
         "phpstan:clear": [
             "./vendor/bin/phpstan clear-result-cache"
+        ],
+        "pint": [
+            "./vendor/bin/pint"
         ]
     },
     "extra": {
