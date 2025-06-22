@@ -60,9 +60,7 @@ export interface UserShowPageProps {
     user: User;
 }
 
-export interface UserCreatePageProps {
-    // Add any props needed for user create page
-}
+export type UserCreatePageProps = Record<string, never>;
 
 export interface UserEditPageProps {
     user: User;
@@ -98,7 +96,7 @@ export interface UserTableColumn {
 export interface UserAction {
     type: 'edit' | 'delete' | 'view';
     label: string;
-    icon?: React.ComponentType<any>;
+    icon?: React.ElementType;
     href?: string;
     onClick?: (user: User) => void;
 }

@@ -43,9 +43,7 @@ export interface LoginPageProps {
     status?: string;
 }
 
-export interface RegisterPageProps {
-    // Add any props needed for register page
-}
+export type RegisterPageProps = Record<string, never>;
 
 export interface ForgotPasswordPageProps {
     status?: string;
@@ -60,9 +58,7 @@ export interface VerifyEmailPageProps {
     status?: string;
 }
 
-export interface ConfirmPasswordPageProps {
-    // Add any props needed for confirm password page
-}
+export type ConfirmPasswordPageProps = Record<string, never>;
 
 // Auth user interface (extends the core User type)
 export interface AuthUser {

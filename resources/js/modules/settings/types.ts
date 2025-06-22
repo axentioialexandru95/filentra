@@ -27,13 +27,9 @@ export interface ProfilePageProps {
     status?: string;
 }
 
-export interface PasswordPageProps {
-    // Add any props needed for password page
-}
+export type PasswordPageProps = Record<string, never>;
 
-export interface AppearancePageProps {
-    // Add any props needed for appearance page
-}
+export type AppearancePageProps = Record<string, never>;
 
 // User profile data
 export interface UserProfile {
@@ -71,6 +67,6 @@ export interface DeleteAccountResponse {
 export interface SettingsNavItem {
     name: string;
     href: string;
-    icon?: React.ComponentType<any>;
+    icon?: React.ElementType;
     current?: boolean;
 }

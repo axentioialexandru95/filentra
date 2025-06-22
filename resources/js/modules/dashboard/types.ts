@@ -34,7 +34,7 @@ export interface QuickAction {
     title: string;
     description: string;
     href: string;
-    icon: React.ComponentType<any>;
+    icon: React.ElementType;
     color: 'blue' | 'green' | 'purple' | 'red' | 'yellow';
     permission?: string;
 }
@@ -50,7 +50,7 @@ export interface DashboardWidget {
         w: number;
         h: number;
     };
-    data: any;
+    data: unknown;
     config?: DashboardWidgetConfig;
 }
 
