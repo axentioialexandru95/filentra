@@ -84,6 +84,7 @@ class WaitlistController extends Controller
             $file = fopen('php://output', 'w');
             fputcsv($file, ['ID', 'Email', 'Interests', 'Joined At']);
 
+            /** @var Waitlist $entry */
             foreach ($waitlist as $entry) {
                 fputcsv($file, [
                     $entry->id,

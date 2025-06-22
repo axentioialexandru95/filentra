@@ -26,6 +26,9 @@ class Waitlist extends Model
     /**
      * Get all waitlist entries ordered by join date
      */
+    /**
+     * @return Collection<int, self>
+     */
     public static function getAll(): Collection
     {
         return self::orderBy('joined_at', 'desc')->get();
