@@ -2,11 +2,13 @@
 
 namespace App\Modules\Waitlist\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Waitlist extends Model
 {
+    /** @use HasFactory<\Database\Factories\WaitlistFactory> */
     use HasFactory;
 
     protected $table = 'waitlist';
@@ -24,7 +26,7 @@ class Waitlist extends Model
     /**
      * Get all waitlist entries ordered by join date
      */
-    public static function getAll()
+    public static function getAll(): Collection
     {
         return self::orderBy('joined_at', 'desc')->get();
     }

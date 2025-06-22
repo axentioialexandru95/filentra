@@ -14,7 +14,7 @@ class WaitlistController extends Controller
     /**
      * Store a new waitlist entry
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255',
@@ -53,7 +53,7 @@ class WaitlistController extends Controller
     /**
      * Display waitlist management page (for authenticated users)
      */
-    public function index()
+    public function index(): \Inertia\Response
     {
         $waitlist = Waitlist::orderBy('joined_at', 'desc')->paginate(50);
         $stats = [
@@ -71,13 +71,13 @@ class WaitlistController extends Controller
     /**
      * Export waitlist as CSV
      */
-    public function exportCsv()
+    public function exportCsv(): \Symfony\Component\HttpFoundation\StreamedResponse
     {
         $waitlist = Waitlist::getAll();
 
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="filentra-waitlist-' . now()->format('Y-m-d') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="filentra-waitlist-'.now()->format('Y-m-d').'.csv"',
         ];
 
         $callback = function () use ($waitlist) {
@@ -102,7 +102,7 @@ class WaitlistController extends Controller
     /**
      * Get waitlist statistics API
      */
-    public function stats()
+    public function stats(): \Illuminate\Http\JsonResponse
     {
         return response()->json([
             'total_count' => Waitlist::getCount(),
