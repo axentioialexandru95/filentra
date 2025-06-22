@@ -1,4 +1,4 @@
-name: linter
+name: lint
 
 on:
   push:
@@ -11,35 +11,53 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  quality:
+  lint:
     runs-on: ubuntu-latest
+    name: Code Quality Checks
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
+          tools: composer:v2
+          coverage: none
 
-      - name: Install Dependencies
-        run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm install
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
 
-      - name: Run Pint
-        run: vendor/bin/pint
+      - name: Install PHP Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Format Frontend
-        run: npm run format
+      - name: Install Node Dependencies
+        run: npm ci
 
-      - name: Lint Frontend
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Check PHP Code Style
+        run: vendor/bin/pint --test
+
+      - name: Run PHPStan
+        run: composer phpstan
+
+      - name: Check TypeScript Types
+        run: npm run types
+
+      - name: Lint Frontend Code
         run: npm run lint
 
-      # - name: Commit Changes
-      #   uses: stefanzweifel/git-auto-commit-action@v5
-      #   with:
-      #     commit_message: fix code style
-      #     commit_options: '--no-verify'
+      - name: Check Frontend Format
+        run: npm run format:check

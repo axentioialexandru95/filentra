@@ -1,0 +1,229 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to method validated\(\) on an unknown class App\\Modules\\Users\\Requests\\StoreUserRequest\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Call to method validated\(\) on an unknown class App\\Modules\\Users\\Requests\\UpdateUserRequest\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Call to static method collection\(\) on an unknown class App\\Modules\\Users\\Resources\\UserResource\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Instantiated class App\\Modules\\Users\\Resources\\UserResource not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:data\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:stats\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Parameter \$request of method App\\Modules\\Users\\Controllers\\UserController\:\:store\(\) has invalid type App\\Modules\\Users\\Requests\\StoreUserRequest\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^Parameter \$request of method App\\Modules\\Users\\Controllers\\UserController\:\:update\(\) has invalid type App\\Modules\\Users\\Requests\\UpdateUserRequest\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Modules/Users/Controllers/UserController.php
+
+		-
+			message: '#^PHPDoc type class\-string\<Illuminate\\Database\\Eloquent\\Model\> of property Database\\Factories\\UserFactory\:\:\$model is not covariant with PHPDoc type class\-string\<App\\Modules\\Users\\Models\\User\> of overridden property Illuminate\\Database\\Eloquent\\Factories\\Factory\<App\\Modules\\Users\\Models\\User\>\:\:\$model\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: database/factories/UserFactory.php
+
+		-
+			message: '#^Call to protected method createTestUser\(\) of class Tests\\DuskTestCase\.$#'
+			identifier: method.protected
+			count: 1
+			path: tests/Browser/ExampleTest.php
+
+		-
+			message: '#^Call to protected method getUniqueEmail\(\) of class Tests\\DuskTestCase\.$#'
+			identifier: method.protected
+			count: 1
+			path: tests/Browser/ExampleTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:actingAs\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Auth/AuthenticationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:assertAuthenticated\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Auth/AuthenticationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:assertGuest\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Feature/Auth/AuthenticationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Auth/AuthenticationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:post\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Feature/Auth/AuthenticationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:actingAs\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Feature/Auth/EmailVerificationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:actingAs\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Feature/Auth/PasswordConfirmationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Feature/Auth/PasswordResetTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:post\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/Feature/Auth/PasswordResetTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:assertAuthenticated\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Auth/RegistrationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Auth/RegistrationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:post\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Auth/RegistrationTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:actingAs\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/DashboardTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Feature/DashboardTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:actingAsTestUser\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/ExampleTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:createTestUser\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/ExampleTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/ExampleTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:getUniqueEmail\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/ExampleTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:getUniqueString\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/ExampleTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function expect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/ExampleTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:actingAs\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Feature/Settings/PasswordUpdateTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:actingAs\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: tests/Feature/Settings/ProfileUpdateTest.php
+
+		-
+			message: '#^Call to an undefined method PHPUnit\\Framework\\TestCase\:\:assertGuest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Settings/ProfileUpdateTest.php
+
+		-
+			message: '#^Undefined variable\: \$this$#'
+			identifier: variable.undefined
+			count: 1
+			path: tests/Pest.php
