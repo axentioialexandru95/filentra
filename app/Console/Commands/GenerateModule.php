@@ -122,7 +122,7 @@ class GenerateModule extends Command
         }
 
         if ($options['seeder'] || $options['crud']) {
-            $steps[] = '   '.(count($steps) + 1).". Run: php artisan db:seed --class={$result->getModuleName()}Seeder";
+            $steps[] = '   ' . (count($steps) + 1) . ". Run: php artisan db:seed --class={$result->getModuleName()}Seeder";
         }
 
         foreach ($steps as $step) {
@@ -139,10 +139,10 @@ class GenerateModule extends Command
 
         $this->line('   • Controllers, Services, Requests, Resources directories');
         $this->line("   • {$result->getModuleName()}ServiceProvider.php with route loading");
-        $this->line('   • routes.php with '.($isCrud ? 'full CRUD routes' : 'sample routes'));
+        $this->line('   • routes.php with ' . ($isCrud ? 'full CRUD routes' : 'sample routes'));
         $this->line('   • Frontend components, pages, hooks, actions directories');
         $this->line('   • types.ts with TypeScript interfaces');
-        $this->line('   • '.($isCrud ? 'Complete CRUD React pages with table and forms' : 'Sample React page with layout'));
+        $this->line('   • ' . ($isCrud ? 'Complete CRUD React pages with table and forms' : 'Sample React page with layout'));
 
         if ($options['model'] || $isCrud) {
             $this->line("   • {$result->getModuleName()} model");

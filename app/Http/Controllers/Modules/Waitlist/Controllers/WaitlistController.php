@@ -77,7 +77,7 @@ class WaitlistController extends Controller
 
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="filentra-waitlist-'.now()->format('Y-m-d').'.csv"',
+            'Content-Disposition' => 'attachment; filename="filentra-waitlist-' . now()->format('Y-m-d') . '.csv"',
         ];
 
         $callback = function () use ($waitlist) {
