@@ -2,10 +2,10 @@ import { Head } from '@inertiajs/react';
 import { BarChart3, CheckCircle, Clock, PieChart, Shield, TrendingUp, UserCheck, Users, UserX } from 'lucide-react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Pie, PieChart as RechartsPieChart, XAxis, YAxis } from 'recharts';
 
-import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/shared/components/ui/chart';
 import AppLayout from '@/shared/layouts/app-layout';
 import { AnalyticsDashboardProps } from '../types';
 

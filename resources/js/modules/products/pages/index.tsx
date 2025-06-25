@@ -102,7 +102,7 @@ export default function ProductsIndex({ data, stats, filters, can_upload_csv, ca
         <AppLayout>
             <Head title="Products" />
 
-            <div className="space-y-6">
+            <div className="space-y-6 p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>

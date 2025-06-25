@@ -2,12 +2,12 @@ import { Head, Link, router } from '@inertiajs/react';
 import { Activity, BarChart3, CheckCircle, Eye, MoreHorizontal, Plus, Shield, TrendingUp, UserCheck, Users, UserX } from 'lucide-react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { getInitials } from '@/core/lib/utils';
 import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/shared/components/ui/chart';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/shared/components/ui/dropdown-menu';
 import { Progress } from '@/shared/components/ui/progress';
 import AppLayout from '@/shared/layouts/app-layout';

@@ -4,6 +4,7 @@ namespace App\Modules\Users\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Role;
+use App\Vendor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -31,6 +32,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'vendor_id',
     ];
 
     /**
@@ -64,6 +66,16 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Get the user's vendor
+     *
+     * @return BelongsTo<Vendor, User>
+     */
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(Vendor::class);
     }
 
     /**
