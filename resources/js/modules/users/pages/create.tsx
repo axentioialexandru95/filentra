@@ -1,4 +1,3 @@
-import { tenantRoute } from '@/core/lib/tenant-utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
@@ -11,8 +10,8 @@ import { Label } from '@/shared/components/ui/label';
 import AppLayout from '@/shared/layouts/app-layout';
 
 export default function CreateUser() {
-    const usersIndexRoute = tenantRoute('users.index');
-    const usersStoreRoute = tenantRoute('users.store');
+    const usersIndexRoute = route('users.index');
+    const usersStoreRoute = route('users.store');
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -21,7 +20,7 @@ export default function CreateUser() {
         },
         {
             title: 'Create',
-            href: tenantRoute('users.create'),
+            href: route('users.create'),
         },
     ];
 

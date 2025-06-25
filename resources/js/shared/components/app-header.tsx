@@ -1,5 +1,4 @@
 import { useInitials } from '@/core/hooks/use-initials';
-import { tenantRoute } from '@/core/lib/tenant-utils';
 import { cn } from '@/core/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/core/types';
 import { UserMenuContent } from '@/modules/users/components/user-menu-content';
@@ -43,17 +42,17 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const mainNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: tenantRoute('dashboard'),
+            href: route('dashboard'),
             icon: LayoutGrid,
         },
         {
             title: 'Users',
-            href: tenantRoute('users.index'),
+            href: route('users.index'),
             icon: Users,
         },
     ];
 
-    const dashboardUrl = tenantRoute('dashboard');
+    const dashboardUrl = route('dashboard');
 
     return (
         <>

@@ -1,4 +1,3 @@
-import { tenantRoute } from '@/core/lib/tenant-utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
@@ -17,9 +16,9 @@ interface EditUserProps {
 }
 
 export default function EditUser({ user }: EditUserProps) {
-    const usersIndexRoute = tenantRoute('users.index');
-    const usersShowRoute = tenantRoute('users.show', { user: user.id });
-    const usersUpdateRoute = tenantRoute('users.update', { user: user.id });
+    const usersIndexRoute = route('users.index');
+    const usersShowRoute = route('users.show', { user: user.id });
+    const usersUpdateRoute = route('users.update', { user: user.id });
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -32,7 +31,7 @@ export default function EditUser({ user }: EditUserProps) {
         },
         {
             title: 'Edit',
-            href: tenantRoute('users.edit', { user: user.id }),
+            href: route('users.edit', { user: user.id }),
         },
     ];
 

@@ -1,4 +1,3 @@
-import { tenantRoute } from '@/core/lib/tenant-utils';
 import { getInitials } from '@/core/lib/utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link } from '@inertiajs/react';
@@ -17,8 +16,8 @@ interface UserShowProps {
 }
 
 export default function ShowUser({ user }: UserShowProps) {
-    const usersIndexRoute = tenantRoute('users.index');
-    const userEditRoute = tenantRoute('users.edit', { user: user.id });
+    const usersIndexRoute = route('users.index');
+    const userEditRoute = route('users.edit', { user: user.id });
 
     if (!user) {
         return (
@@ -47,7 +46,7 @@ export default function ShowUser({ user }: UserShowProps) {
         },
         {
             title: user.name || 'Unknown User',
-            href: tenantRoute('users.show', { user: user.id }),
+            href: route('users.show', { user: user.id }),
         },
     ];
 

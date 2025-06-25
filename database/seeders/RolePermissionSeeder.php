@@ -15,55 +15,29 @@ class RolePermissionSeeder extends Seeder
     {
         // Create permissions first
         $permissions = [
-            // Tenant Management
-            [
-                'name' => 'View Tenants',
-                'slug' => 'view_tenants',
-                'description' => 'Can view all tenants in the system',
-                'category' => 'tenant_management',
-            ],
-            [
-                'name' => 'Create Tenants',
-                'slug' => 'create_tenants',
-                'description' => 'Can create new tenants',
-                'category' => 'tenant_management',
-            ],
-            [
-                'name' => 'Edit Tenants',
-                'slug' => 'edit_tenants',
-                'description' => 'Can edit existing tenants',
-                'category' => 'tenant_management',
-            ],
-            [
-                'name' => 'Delete Tenants',
-                'slug' => 'delete_tenants',
-                'description' => 'Can delete tenants',
-                'category' => 'tenant_management',
-            ],
-
             // User Management
             [
                 'name' => 'View Users',
                 'slug' => 'view_users',
-                'description' => 'Can view users in own tenant',
+                'description' => 'Can view users in the system',
                 'category' => 'user_management',
             ],
             [
                 'name' => 'Create Users',
                 'slug' => 'create_users',
-                'description' => 'Can create new users in own tenant',
+                'description' => 'Can create new users',
                 'category' => 'user_management',
             ],
             [
                 'name' => 'Edit Users',
                 'slug' => 'edit_users',
-                'description' => 'Can edit users in own tenant',
+                'description' => 'Can edit users',
                 'category' => 'user_management',
             ],
             [
                 'name' => 'Delete Users',
                 'slug' => 'delete_users',
-                'description' => 'Can delete users in own tenant',
+                'description' => 'Can delete users',
                 'category' => 'user_management',
             ],
 
@@ -110,14 +84,14 @@ class RolePermissionSeeder extends Seeder
             [
                 'name' => 'Super Administrator',
                 'slug' => 'superadmin',
-                'description' => 'Has complete access to the entire system including all tenants',
+                'description' => 'Has complete access to the entire system',
                 'level' => 100,
                 'permissions' => array_column($permissions, 'slug'), // All permissions
             ],
             [
-                'name' => 'Tenant Administrator',
-                'slug' => 'tenant_admin',
-                'description' => 'Has administrative access within their own tenant',
+                'name' => 'Administrator',
+                'slug' => 'admin',
+                'description' => 'Has administrative access to the system',
                 'level' => 50,
                 'permissions' => [
                     'view_users',
@@ -130,7 +104,7 @@ class RolePermissionSeeder extends Seeder
             [
                 'name' => 'Manager',
                 'slug' => 'manager',
-                'description' => 'Can manage users within their tenant',
+                'description' => 'Can manage users in the system',
                 'level' => 30,
                 'permissions' => [
                     'view_users',
@@ -145,6 +119,27 @@ class RolePermissionSeeder extends Seeder
                 'level' => 10,
                 'permissions' => [
                     'view_users',
+                ],
+            ],
+            [
+                'name' => 'Vendor',
+                'slug' => 'vendor',
+                'description' => 'Vendor with access to manage their products and orders',
+                'level' => 20,
+                'permissions' => [
+                    'view_users',
+                ],
+            ],
+            [
+                'name' => 'Warehouse Manager',
+                'slug' => 'warehouse_manager',
+                'description' => 'Warehouse manager with inventory and logistics access',
+                'level' => 40,
+                'permissions' => [
+                    'view_users',
+                    'create_users',
+                    'edit_users',
+                    'view_roles',
                 ],
             ],
         ];

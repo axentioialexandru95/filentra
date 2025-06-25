@@ -3,9 +3,7 @@
 namespace App\Modules\Users\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Core\Traits\HasTenantScope;
 use App\Role;
-use App\Modules\Tenants\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +12,6 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory;
-    use HasTenantScope;
     use Notifiable;
 
     /**
@@ -34,7 +31,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'tenant_id',
         'role_id',
     ];
 
@@ -69,13 +65,7 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    /**
-     * Get the user's tenant
-     */
-    public function tenant(): BelongsTo
-    {
-        return $this->belongsTo(Tenant::class);
-    }
+
 
     /**
      * Check if user has a specific role
@@ -101,13 +91,7 @@ class User extends Authenticatable
         return $this->role?->isSuperAdmin() ?? false;
     }
 
-    /**
-     * Check if user can manage tenants (superadmin only)
-     */
-    public function canManageTenants(): bool
-    {
-        return $this->isSuperAdmin();
-    }
+
 
     /**
      * Check if user can impersonate other users

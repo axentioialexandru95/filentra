@@ -3,20 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Public routes (no tenant required)
+// Public routes
 Route::get('/', function () {
     return Inertia::render('modules/dashboard/pages/welcome');
 })->name('home');
 
-// Auth routes (no tenant required)
+// Auth routes
 require __DIR__ . '/auth.php';
 
-// Authenticated routes with tenant context
-Route::middleware(['auth', 'verified', 'tenant'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('modules/dashboard/pages/dashboard');
-    })->name('dashboard');
-    
+// Authenticated routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
     // Users routes
     Route::get('users', [\App\Modules\Users\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('users/create', [\App\Modules\Users\Controllers\UserController::class, 'create'])->name('users.create');
@@ -25,7 +23,7 @@ Route::middleware(['auth', 'verified', 'tenant'])->group(function () {
     Route::get('users/{user}/edit', [\App\Modules\Users\Controllers\UserController::class, 'edit'])->name('users.edit');
     Route::patch('users/{user}', [\App\Modules\Users\Controllers\UserController::class, 'update'])->name('users.update');
     Route::delete('users/{user}', [\App\Modules\Users\Controllers\UserController::class, 'destroy'])->name('users.destroy');
-    
+
     // Settings routes
     Route::redirect('settings', 'settings/profile');
     Route::get('settings/profile', [\App\Modules\Settings\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,17 +36,11 @@ Route::middleware(['auth', 'verified', 'tenant'])->group(function () {
     })->name('appearance');
 });
 
-// Superadmin only routes (no tenant context needed)
+// Superadmin only routes
 Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
-    // Tenant Management
-    Route::get('tenants', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'index'])->name('tenants.index');
-    Route::get('tenants/create', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'create'])->name('tenants.create');
-    Route::post('tenants', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'store'])->name('tenants.store');
-    Route::get('tenants/{tenant}', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'show'])->name('tenants.show');
-    Route::get('tenants/{tenant}/edit', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'edit'])->name('tenants.edit');
-    Route::patch('tenants/{tenant}', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'update'])->name('tenants.update');
-    Route::delete('tenants/{tenant}', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'destroy'])->name('tenants.destroy');
-    Route::patch('tenants/{tenant}/toggle-status', [\App\Http\Controllers\Modules\Tenants\Controllers\TenantController::class, 'toggleStatus'])->name('tenants.toggle-status');
+    // Analytics Dashboard
+    Route::get('analytics', [\App\Http\Controllers\AnalyticsController::class, 'dashboard'])->name('analytics.dashboard');
+
 });
 
 // Impersonation routes (permission-based)

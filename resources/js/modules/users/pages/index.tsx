@@ -1,4 +1,3 @@
-import { tenantRoute } from '@/core/lib/tenant-utils';
 import { getInitials } from '@/core/lib/utils';
 import { type BreadcrumbItem } from '@/core/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
@@ -40,11 +39,11 @@ interface UsersIndexProps {
 export default function UsersIndex({ data: users, stats, filters }: UsersIndexProps) {
     const [search, setSearch] = useState(filters.search || '');
     const [status, setStatus] = useState(filters.status || 'all');
-    const { props } = usePage();
-    const currentUser = props.auth?.user as any;
+    const { auth } = usePage<any>().props;
+    const currentUser = auth.user as any;
 
-    const usersIndexRoute = tenantRoute('users.index');
-    const usersCreateRoute = tenantRoute('users.create');
+    const usersIndexRoute = route('users.index');
+    const usersCreateRoute = route('users.create');
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -67,11 +66,11 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
     };
 
     const getUserShowRoute = (userId: number) => {
-        return tenantRoute('users.show', { user: userId });
+        return route('users.show', { user: userId });
     };
 
     const getUserEditRoute = (userId: number) => {
-        return tenantRoute('users.edit', { user: userId });
+        return route('users.edit', { user: userId });
     };
 
     const handleImpersonate = (userId: number) => {

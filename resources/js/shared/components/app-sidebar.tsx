@@ -1,4 +1,4 @@
-import { type NavItem } from '@/core/types';
+import { type NavItem, type SharedData } from '@/core/types';
 import { NavUser } from '@/modules/users/components/nav-user';
 import { NavMain } from '@/shared/components/nav-main';
 import {
@@ -11,12 +11,12 @@ import {
     SidebarMenuItem,
 } from '@/shared/components/ui/sidebar';
 import { Link, usePage } from '@inertiajs/react';
-import { Building, LayoutGrid, Users } from 'lucide-react';
+import { BarChart3, LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
-    const { props } = usePage();
-    const user = props.auth?.user as any;
+    const { auth } = usePage<SharedData>().props;
+    const user = auth.user as any;
 
     const mainNavItems: NavItem[] = [
         {
@@ -31,12 +31,12 @@ export function AppSidebar() {
         },
     ];
 
-    // Add tenant management for superadmins
+    // Add superadmin-only navigation items
     if (user?.role?.slug === 'superadmin') {
         mainNavItems.push({
-            title: 'Tenants',
-            href: '/tenants',
-            icon: Building,
+            title: 'Analytics',
+            href: '/analytics',
+            icon: BarChart3,
         });
     }
 

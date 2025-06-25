@@ -16,19 +16,17 @@ class DatabaseSeeder extends Seeder
     {
         // Run role and permission seeder first
         $this->call([
-            TenantSeeder::class,
             RolePermissionSeeder::class,
         ]);
 
         // Get or create admin user with superadmin role
         $superAdminRole = Role::where('slug', 'superadmin')->first();
-        
+
         $adminUser = User::updateOrCreate(
             ['email' => 'admin@admin.com'], // Search criteria
             [
                 'name' => 'Test User',
                 'password' => bcrypt('password'),
-                'tenant_id' => 1, // Assign to first tenant
                 'role_id' => $superAdminRole->id,
                 'email_verified_at' => now(),
             ]

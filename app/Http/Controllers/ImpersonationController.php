@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Modules\Users\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -12,7 +14,7 @@ class ImpersonationController extends Controller
     /**
      * Start impersonating a user
      */
-    public function start(User $user)
+    public function start(Request $request, User $user): RedirectResponse
     {
         $impersonator = Auth::user();
 
@@ -34,7 +36,7 @@ class ImpersonationController extends Controller
     /**
      * Stop impersonating and return to original user
      */
-    public function stop()
+    public function stop(Request $request): RedirectResponse
     {
         if (!Session::has('impersonator_id')) {
             return redirect()->route('dashboard')
@@ -58,9 +60,9 @@ class ImpersonationController extends Controller
     }
 
     /**
-     * Check if currently impersonating
+     * Get current impersonation status
      */
-    public function status()
+    public function status(Request $request): JsonResponse
     {
         return response()->json([
             'impersonating' => Session::has('impersonator_id'),
