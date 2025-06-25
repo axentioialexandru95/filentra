@@ -11,7 +11,7 @@ import {
     SidebarMenuItem,
 } from '@/shared/components/ui/sidebar';
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, LayoutGrid, Shield, Tag, Users } from 'lucide-react';
+import { BarChart3, LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -41,20 +41,6 @@ export function AppSidebar() {
             title: 'Analytics',
             href: '/analytics',
             icon: BarChart3,
-        });
-    }
-
-    // Roles and Permissions (Superadmin and Admin only)
-    if (user?.role?.slug === 'superadmin' || user?.role?.slug === 'admin') {
-        mainNavItems.push({
-            title: 'Roles',
-            href: '/rbac/roles',
-            icon: Tag,
-        });
-        mainNavItems.push({
-            title: 'Permissions',
-            href: '/rbac/permissions',
-            icon: Shield,
         });
     }
 

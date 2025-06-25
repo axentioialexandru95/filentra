@@ -11,6 +11,15 @@ Route::get('/', function () {
 // Auth routes
 require __DIR__ . '/auth.php';
 
+// Settings routes
+require __DIR__ . '/settings.php';
+
+// Module routes
+require __DIR__ . '/../app/Modules/Users/routes.php';
+require __DIR__ . '/../app/Modules/RBAC/routes.php';
+require __DIR__ . '/../app/Modules/Products/routes.php';
+require __DIR__ . '/../app/Modules/Waitlist/routes.php';
+
 // Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
