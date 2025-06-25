@@ -76,7 +76,7 @@ export default function PermissionsIndex({ permissions, categories, filters }: P
         <AppLayout>
             <Head title="Permissions Management" />
 
-            <div className="space-y-6">
+            <div className="space-y-6 p-6">
                 <div className="flex items-center justify-between">
                     <Heading title="Permissions Management" />
                     <Link href={route('rbac.permissions.create')}>

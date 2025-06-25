@@ -39,4 +39,4 @@ class RBACAccessMiddleware
 
         return $next($request);
     }
-} 
+}

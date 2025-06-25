@@ -7,56 +7,7 @@ import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import AppLayout from '@/shared/layouts/app-layout';
-
-interface AnalyticsData {
-    users: {
-        total: number;
-        verified: number;
-        unverified: number;
-        recent: number;
-        active_today: number;
-    };
-    roles: {
-        total: number;
-        with_users: number;
-        without_users: number;
-        most_assigned: string;
-    };
-    permissions: {
-        total: number;
-        assigned: number;
-        unassigned: number;
-        categories: number;
-    };
-    distribution: {
-        roles: Array<{
-            role: string;
-            users: number;
-            percentage: number;
-        }>;
-        permissions_by_category: Array<{
-            category: string;
-            permissions: number;
-        }>;
-    };
-    growth: {
-        users_by_month: Array<{
-            month: string;
-            count: number;
-        }>;
-        role_assignments_by_month: Array<{
-            month: string;
-            roles: Array<{
-                role: string;
-                count: number;
-            }>;
-        }>;
-    };
-}
-
-interface AnalyticsDashboardProps {
-    analytics: AnalyticsData;
-}
+import { AnalyticsDashboardProps } from '../types';
 
 export default function AnalyticsDashboard({ analytics }: AnalyticsDashboardProps) {
     const formatMonth = (monthString: string) => {

@@ -74,14 +74,14 @@ class RoleController extends Controller implements HasMiddleware
 
     /**
      * Store a newly created role.
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(StoreRoleRequest $request)
+    public function store(StoreRoleRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $role = Role::create($request->validated());
+        $validated = $request->validated();
+        $role = Role::create($validated);
 
-        if ($request->has('permissions')) {
-            $role->permissions()->sync($request->permissions);
+        if (isset($validated['permissions'])) {
+            $role->permissions()->sync($validated['permissions']);
         }
 
         return redirect()
@@ -126,12 +126,13 @@ class RoleController extends Controller implements HasMiddleware
      * Update the specified role.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role): \Illuminate\Http\RedirectResponse
     {
-        $role->update($request->validated());
+        $validated = $request->validated();
+        $role->update($validated);
 
-        if ($request->has('permissions')) {
-            $role->permissions()->sync($request->permissions);
+        if (isset($validated['permissions'])) {
+            $role->permissions()->sync($validated['permissions']);
         }
 
         return redirect()

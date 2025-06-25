@@ -21,13 +21,13 @@ class RBACServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Load routes with middleware
-        Route::middleware(['auth', 'verified', 'rbac.access'])
+        Route::middleware(['web'])
             ->prefix('rbac')
             ->name('rbac.')
             ->group(__DIR__ . '/routes.php');
 
         // Load views if needed
-        // $this->loadViewsFrom(__DIR__ . '/views', 'rbac');
+        // $this->loadViewsFrom(__DIR__ . '/modules/rbac/views', 'rbac');
 
         // Publish assets if needed
         // $this->publishes([

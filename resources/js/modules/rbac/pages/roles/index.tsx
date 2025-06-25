@@ -81,7 +81,7 @@ export default function RolesIndex({ roles, filters }: RolesIndexProps) {
         <AppLayout>
             <Head title="Roles Management" />
 
-            <div className="space-y-6">
+            <div className="space-y-6 p-6">
                 <div className="flex items-center justify-between">
                     <Heading title="Roles Management" />
                     <Link href={route('rbac.roles.create')}>
