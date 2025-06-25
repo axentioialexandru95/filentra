@@ -9,11 +9,17 @@ Route::get('/', function () {
 })->name('home');
 
 // Auth routes
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+});
+
+// Admin and Superadmin routes (for vendor management)
+Route::middleware(['auth', 'verified', 'role:admin,superadmin'])->group(function () {
+    // Vendor management routes
+    Route::resource('vendors', \App\Http\Controllers\VendorController::class);
 });
 
 // Superadmin only routes

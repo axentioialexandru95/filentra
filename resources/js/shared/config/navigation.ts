@@ -1,5 +1,5 @@
-import { type RBACConfig } from '@/core/types';
-import { Layers, Package, Shield } from 'lucide-react';
+import { type RBACConfig, type User } from '@/core/types';
+import { Building2, Layers, Package, Shield } from 'lucide-react';
 
 export interface NavigationItem {
     label: string;
@@ -15,11 +15,40 @@ export interface NavigationSection {
     tooltip: string;
     items: NavigationItem[];
     isOpen: (url: string) => boolean;
-    canAccess: (rbacConfig: RBACConfig) => boolean;
+    canAccess: (rbacConfig: RBACConfig, user?: User) => boolean;
 }
 
 /**
- * Products Navigation Configuration
+ * Vendors Navigation Configuration (Admin/Superadmin only)
+ */
+export const VENDORS_NAVIGATION: NavigationSection = {
+    key: 'vendors',
+    label: 'Vendors',
+    icon: Building2,
+    tooltip: 'Vendor Management',
+    isOpen: (url: string) => url.startsWith('/vendors'),
+    canAccess: (rbacConfig: RBACConfig, user?: User) => {
+        // Only admin and superadmin can access vendor management
+        return user?.role?.slug === 'admin' || user?.role?.slug === 'superadmin';
+    },
+    items: [
+        {
+            label: 'All Vendors',
+            routeName: 'vendors.index',
+            urlPattern: '/vendors',
+            isActive: (url: string) => url === '/vendors' || url.startsWith('/vendors?'),
+        },
+        {
+            label: 'Add Vendor',
+            routeName: 'vendors.create',
+            urlPattern: '/vendors/create',
+            isActive: (url: string) => url === '/vendors/create',
+        },
+    ],
+};
+
+/**
+ * Products Navigation Configuration (Vendors only)
  */
 export const PRODUCTS_NAVIGATION: NavigationSection = {
     key: 'products',
@@ -27,8 +56,9 @@ export const PRODUCTS_NAVIGATION: NavigationSection = {
     icon: Package,
     tooltip: 'Product Management',
     isOpen: (url: string) => url.startsWith('/products'),
-    canAccess: () => {
-        return true; // All authenticated users can see products based on their role permissions
+    canAccess: (rbacConfig: RBACConfig, user?: User) => {
+        // Only vendors can directly access products
+        return user?.role?.slug === 'vendor';
     },
     items: [
         {
@@ -55,8 +85,10 @@ export const BATCHES_NAVIGATION: NavigationSection = {
     icon: Layers,
     tooltip: 'Batch Management',
     isOpen: (url: string) => url.startsWith('/batches'),
-    canAccess: () => {
-        return true; // All authenticated users can see batches based on their role permissions
+    canAccess: (rbacConfig: RBACConfig, user?: User) => {
+        // Vendors can manage their own batches
+        // Admin/Superadmin see batches through vendors
+        return user?.role?.slug === 'vendor';
     },
     items: [
         {
@@ -97,8 +129,10 @@ export const RBAC_NAVIGATION: NavigationSection = {
     icon: Shield,
     tooltip: 'RBAC Management',
     isOpen: (url: string) => url.startsWith('/rbac'),
-    canAccess: (rbacConfig: RBACConfig) => {
-        return rbacConfig.features.roles_management || rbacConfig.features.permissions_management;
+    canAccess: (rbacConfig: RBACConfig, user?: User) => {
+        // Only admin and superadmin can access RBAC
+        const isAdminOrSuperadmin = user?.role?.slug === 'admin' || user?.role?.slug === 'superadmin';
+        return isAdminOrSuperadmin && (rbacConfig.features.roles_management || rbacConfig.features.permissions_management);
     },
     items: [
         {
@@ -155,8 +189,8 @@ export const getFilteredRBACItems = (rbacConfig: RBACConfig): NavigationItem[] =
 };
 
 /**
- * Get all navigation sections
+ * Get all navigation sections based on user role
  */
 export const getAllNavigationSections = (): NavigationSection[] => {
-    return [PRODUCTS_NAVIGATION, BATCHES_NAVIGATION, RBAC_NAVIGATION];
+    return [VENDORS_NAVIGATION, PRODUCTS_NAVIGATION, BATCHES_NAVIGATION, RBAC_NAVIGATION];
 };
