@@ -15,12 +15,12 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 
         $user = auth()->user();
-        
+
         // Check if user has any of the required roles
         $hasRole = false;
         foreach ($roles as $role) {
@@ -30,7 +30,7 @@ class RoleMiddleware
             }
         }
 
-        if (!$hasRole) {
+        if (! $hasRole) {
             abort(403, 'Insufficient permissions. Required role: ' . implode(' or ', $roles));
         }
 

@@ -11,16 +11,14 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use Notifiable;
 
     /**
-     * Create a new factory instance for the model.
+     * The model's factory class.
      */
-    protected static function newFactory(): \Database\Factories\UserFactory
-    {
-        return \Database\Factories\UserFactory::new();
-    }
+    protected static string $factory = \Database\Factories\UserFactory::class;
 
     /**
      * The attributes that are mass assignable.
@@ -59,18 +57,17 @@ class User extends Authenticatable
 
     /**
      * Get the user's role
+     * @return BelongsTo<Role, User>
      */
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
-
-
     /**
      * Check if user has a specific role
      */
-    public function hasRole(string $role): bool
+    public function hasRole(string $role): bool|null
     {
         return $this->role?->slug === $role;
     }
@@ -80,7 +77,42 @@ class User extends Authenticatable
      */
     public function hasPermission(string $permission): bool
     {
-        return $this->role?->hasPermission($permission) ?? false;
+        if (! $this->role) {
+            return false;
+        }
+
+        return $this->role->hasPermission($permission);
+    }
+
+    /**
+     * Check if user has any of the given permissions
+     * @param array<string> $permissions
+     */
+    public function hasAnyPermission(array $permissions): bool|null
+    {
+        foreach ($permissions as $permission) {
+            if ($this->hasPermission($permission)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if user has all of the given permissions
+     *
+     * @param array<string> $permissions
+     */
+    public function hasAllPermissions(array $permissions): bool|null
+    {
+        foreach ($permissions as $permission) {
+            if (! $this->hasPermission($permission)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -88,10 +120,8 @@ class User extends Authenticatable
      */
     public function isSuperAdmin(): bool
     {
-        return $this->role?->isSuperAdmin() ?? false;
+        return $this->role && $this->role->isSuperAdmin();
     }
-
-
 
     /**
      * Check if user can impersonate other users
@@ -112,7 +142,7 @@ class User extends Authenticatable
         }
 
         // Only superadmins can impersonate
-        if (!$impersonator->isSuperAdmin()) {
+        if (! $impersonator->isSuperAdmin()) {
             return false;
         }
 
@@ -123,8 +153,18 @@ class User extends Authenticatable
     /**
      * Get user's role name for display
      */
-    public function getRoleName(): string
+    public function getRoleName(): string|null
     {
-        return $this->role?->name ?? 'No Role';
+        return $this->role->name ?? 'No Role';
+    }
+
+    /**
+     * Get all permissions for this user through their role
+     *
+     * @return \Illuminate\Support\Collection<int, \App\Permission>
+     */
+    public function getPermissions()
+    {
+        return $this->role ? $this->role->permissions : collect();
     }
 }

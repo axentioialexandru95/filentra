@@ -11,7 +11,7 @@ createServer((page) =>
         page,
         render: ReactDOMServer.renderToString,
         title: (title) => `${title} - ${appName}`,
-        resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
+        resolve: (name) => resolvePageComponent(`./modules/${name}.tsx`, import.meta.glob('./modules/**/*.tsx')),
         setup: ({ App, props }) => {
             // Set up global route function for SSR
             (global as typeof global & { route: (name: string, params?: Record<string, string | number>, absolute?: boolean) => string }).route = (

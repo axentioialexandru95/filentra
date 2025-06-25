@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Modules\Users\Models\User;
-use App\Role;
 use App\Permission;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $user = $request->user();
 
         // If not superadmin, show simple dashboard
-        if (!$user->isSuperAdmin()) {
+        if (! $user->isSuperAdmin()) {
             return Inertia::render('modules/dashboard/pages/dashboard');
         }
 
@@ -38,6 +38,11 @@ class DashboardController extends Controller
         ]);
     }
 
+    /**
+     * Get analytics data
+     *
+     * @return array<string, array<string, mixed>>
+     */
     private function getAnalytics(): array
     {
         $totalUsers = User::count();
@@ -67,6 +72,11 @@ class DashboardController extends Controller
         ];
     }
 
+    /**
+     * Get recent users data
+     *
+     * @return array<int, array<string, mixed>>
+     */
     private function getRecentUsers(): array
     {
         return User::with('role')
@@ -78,8 +88,8 @@ class DashboardController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'role' => $user->role?->name ?? 'No Role',
-                    'role_slug' => $user->role?->slug ?? null,
+                    'role' => $user->role->name ?? 'No Role',
+                    'role_slug' => $user->role->slug ?? null,
                     'verified' => $user->email_verified_at ? true : false,
                     'created_at' => $user->created_at->format('M j, Y'),
                     'created_at_human' => $user->created_at->diffForHumans(),
@@ -88,6 +98,11 @@ class DashboardController extends Controller
             ->toArray();
     }
 
+    /**
+     * Get users grouped by role
+     *
+     * @return array<int, array<string, mixed>>
+     */
     private function getUsersByRole(): array
     {
         return Role::withCount('users')
@@ -105,6 +120,11 @@ class DashboardController extends Controller
             ->toArray();
     }
 
+    /**
+     * Get system health data
+     *
+     * @return array<string, mixed>
+     */
     private function getSystemHealth(): array
     {
         $usersGrowth = User::select(
@@ -115,10 +135,10 @@ class DashboardController extends Controller
             ->groupBy('date')
             ->orderBy('date')
             ->get()
-            ->map(function ($item) {
+            ->map(function (object $item): array {
                 return [
-                    'date' => $item->date,
-                    'count' => $item->count,
+                    'date' => (string) $item->date,
+                    'count' => (int) $item->count,
                 ];
             });
 

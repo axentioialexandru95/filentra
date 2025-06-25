@@ -1,3 +1,4 @@
+import { type Auth } from '@/core/types';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Link } from '@inertiajs/react';
@@ -7,12 +8,7 @@ import { ArrowRight, Moon, Sun } from 'lucide-react';
 interface HeaderProps {
     isDark: boolean;
     toggleTheme: () => void;
-    auth: {
-        user?: {
-            name: string;
-            email: string;
-        };
-    };
+    auth?: Auth;
 }
 
 export function Header({ isDark, toggleTheme, auth }: HeaderProps) {
@@ -65,7 +61,7 @@ export function Header({ isDark, toggleTheme, auth }: HeaderProps) {
                             </Button>
                         </motion.div>
 
-                        {auth.user ? (
+                        {auth?.user ? (
                             <Link href={getDashboardUrl()}>
                                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                     <Button className="group h-8 px-3 shadow-lg transition-all duration-300 hover:shadow-xl sm:h-auto sm:px-4">

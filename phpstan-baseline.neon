@@ -1,76 +1,220 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to method validated\(\) on an unknown class App\\Modules\\Users\\Requests\\StoreUserRequest\.$#'
-			identifier: class.notFound
+			message: '#^Access to an undefined property App\\Modules\\Users\\Models\\User\:\:\$count\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Http/Controllers/AnalyticsController.php
 
 		-
-			message: '#^Call to method validated\(\) on an unknown class App\\Modules\\Users\\Requests\\UpdateUserRequest\.$#'
-			identifier: class.notFound
+			message: '#^Access to an undefined property App\\Modules\\Users\\Models\\User\:\:\$month\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Http/Controllers/AnalyticsController.php
 
 		-
-			message: '#^Call to static method collection\(\) on an unknown class App\\Modules\\Users\\Resources\\UserResource\.$#'
-			identifier: class.notFound
+			message: '#^Access to an undefined property App\\Permission\:\:\$count\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Http/Controllers/AnalyticsController.php
 
 		-
-			message: '#^Instantiated class App\\Modules\\Users\\Resources\\UserResource not found\.$#'
-			identifier: class.notFound
+			message: '#^Access to an undefined property App\\Modules\\Users\\Models\\User\:\:\$count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Users\\Models\\User\:\:\$date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/DashboardController.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$category\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/PermissionResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/PermissionResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/PermissionResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/PermissionResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/PermissionResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/PermissionResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$roles\.$#'
+			identifier: property.notFound
 			count: 2
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Modules/RBAC/Resources/PermissionResource.php
 
 		-
-			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:data\(\) has no return type specified\.$#'
-			identifier: missingType.return
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$slug\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Modules/RBAC/Resources/PermissionResource.php
 
 		-
-			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:destroy\(\) has no return type specified\.$#'
-			identifier: missingType.return
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\PermissionResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Modules/RBAC/Resources/PermissionResource.php
 
 		-
-			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:stats\(\) has no return type specified\.$#'
-			identifier: missingType.return
+			message: '#^Call to an undefined method App\\Modules\\RBAC\\Resources\\PermissionResource\:\:relationLoaded\(\)\.$#'
+			identifier: method.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Modules/RBAC/Resources/PermissionResource.php
 
 		-
-			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:store\(\) has no return type specified\.$#'
-			identifier: missingType.return
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$created_at\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Modules/RBAC/Resources/RoleResource.php
 
 		-
-			message: '#^Method App\\Modules\\Users\\Controllers\\UserController\:\:update\(\) has no return type specified\.$#'
-			identifier: missingType.return
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$description\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Modules/RBAC/Resources/RoleResource.php
 
 		-
-			message: '#^Parameter \$request of method App\\Modules\\Users\\Controllers\\UserController\:\:store\(\) has invalid type App\\Modules\\Users\\Requests\\StoreUserRequest\.$#'
-			identifier: class.notFound
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$id\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Modules/RBAC/Resources/RoleResource.php
 
 		-
-			message: '#^Parameter \$request of method App\\Modules\\Users\\Controllers\\UserController\:\:update\(\) has invalid type App\\Modules\\Users\\Requests\\UpdateUserRequest\.$#'
-			identifier: class.notFound
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$is_active\.$#'
+			identifier: property.notFound
 			count: 1
-			path: app/Modules/Users/Controllers/UserController.php
+			path: app/Modules/RBAC/Resources/RoleResource.php
 
 		-
-			message: '#^PHPDoc type class\-string\<Illuminate\\Database\\Eloquent\\Model\> of property Database\\Factories\\UserFactory\:\:\$model is not covariant with PHPDoc type class\-string\<App\\Modules\\Users\\Models\\User\> of overridden property Illuminate\\Database\\Eloquent\\Factories\\Factory\<App\\Modules\\Users\\Models\\User\>\:\:\$model\.$#'
-			identifier: property.phpDocType
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$level\.$#'
+			identifier: property.notFound
 			count: 1
-			path: database/factories/UserFactory.php
+			path: app/Modules/RBAC/Resources/RoleResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/RoleResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$permissions\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/RoleResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/RoleResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/RoleResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\RBAC\\Resources\\RoleResource\:\:\$users\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Modules/RBAC/Resources/RoleResource.php
+
+		-
+			message: '#^Call to an undefined method App\\Modules\\RBAC\\Resources\\RoleResource\:\:isSuperAdmin\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Modules/RBAC/Resources/RoleResource.php
+
+		-
+			message: '#^Call to an undefined method App\\Modules\\RBAC\\Resources\\RoleResource\:\:relationLoaded\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Modules/RBAC/Resources/RoleResource.php
+
+		-
+			message: '#^Method App\\Modules\\Users\\Models\\User\:\:role\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Role, App\\Modules\\Users\\Models\\User\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Role, \$this\(App\\Modules\\Users\\Models\\User\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Modules/Users/Models/User.php
+
+		-
+			message: '#^Method App\\Permission\:\:roles\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Role, Illuminate\\Database\\Eloquent\\Relations\\Pivot, ''pivot''\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Role, \$this\(App\\Permission\), Illuminate\\Database\\Eloquent\\Relations\\Pivot, ''pivot''\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Permission.php
+
+		-
+			message: '#^Type string in generic type Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Role, Illuminate\\Database\\Eloquent\\Relations\\Pivot, string\> in PHPDoc tag @return is not subtype of template type TPivotModel of Illuminate\\Database\\Eloquent\\Relations\\Pivot \= Illuminate\\Database\\Eloquent\\Relations\\Pivot of class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: app/Permission.php
+
+		-
+			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Modules\\Users\\Models\\User\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
+			identifier: generics.lessTypes
+			count: 1
+			path: app/Role.php
+
+		-
+			message: '#^Method App\\Role\:\:permissions\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Permission, Illuminate\\Database\\Eloquent\\Relations\\Pivot, ''pivot''\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Permission, \$this\(App\\Role\), Illuminate\\Database\\Eloquent\\Relations\\Pivot, ''pivot''\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Role.php
+
+		-
+			message: '#^Method App\\Role\:\:scopeActive\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Role.php
+
+		-
+			message: '#^Method App\\Role\:\:scopeActive\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Role.php
+
+		-
+			message: '#^Method App\\Role\:\:users\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Modules\\Users\\Models\\User\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Modules\\Users\\Models\\User, \$this\(App\\Role\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Role.php
+
+		-
+			message: '#^Type string in generic type Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Permission, Illuminate\\Database\\Eloquent\\Relations\\Pivot, string\> in PHPDoc tag @return is not subtype of template type TPivotModel of Illuminate\\Database\\Eloquent\\Relations\\Pivot \= Illuminate\\Database\\Eloquent\\Relations\\Pivot of class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: app/Role.php
 
 		-
 			message: '#^Call to protected method createTestUser\(\) of class Tests\\DuskTestCase\.$#'

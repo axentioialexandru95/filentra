@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Modules\Users\Models\User;
-use App\Role;
 use App\Permission;
-use Illuminate\Http\Request;
+use App\Role;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,11 +24,14 @@ class AnalyticsController extends Controller
             'growth' => $this->getGrowthAnalytics(),
         ];
 
-        return Inertia::render('modules/dashboard/pages/analytics', [
+        return Inertia::render('modules/analytics/pages/dashboard', [
             'analytics' => $analytics,
         ]);
     }
 
+    /**
+     * @return array<string, int>
+     */
     private function getUserAnalytics(): array
     {
         return [
@@ -41,6 +43,9 @@ class AnalyticsController extends Controller
         ];
     }
 
+    /**
+     * @return array<string, int|string>
+     */
     private function getRoleAnalytics(): array
     {
         return [
@@ -49,10 +54,13 @@ class AnalyticsController extends Controller
             'without_users' => Role::doesntHave('users')->count(),
             'most_assigned' => Role::withCount('users')
                 ->orderBy('users_count', 'desc')
-                ->first()?->name ?? 'None',
+                ->first()->name
         ];
     }
 
+    /**
+     * @return array<string, int|string>
+     */
     private function getPermissionAnalytics(): array
     {
         return [
@@ -63,12 +71,15 @@ class AnalyticsController extends Controller
         ];
     }
 
+    /**
+     * @return array<string, int|string>
+     */
     private function getDistributionAnalytics(): array
     {
         $roleDistribution = Role::withCount('users')
             ->orderBy('users_count', 'desc')
             ->get()
-            ->map(function ($role) {
+            ->map(function ($role): array {
                 return [
                     'role' => $role->name,
                     'users' => $role->users_count,
@@ -80,10 +91,10 @@ class AnalyticsController extends Controller
             ->groupBy('category')
             ->orderBy('count', 'desc')
             ->get()
-            ->map(function ($item) {
+            ->map(function (object $item): array {
                 return [
                     'category' => $item->category,
-                    'permissions' => $item->count,
+                    'permissions' => (int) $item->count,
                 ];
             });
 
@@ -93,6 +104,9 @@ class AnalyticsController extends Controller
         ];
     }
 
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
     private function getGrowthAnalytics(): array
     {
         $userGrowth = User::select(
@@ -103,12 +117,13 @@ class AnalyticsController extends Controller
             ->groupBy('month')
             ->orderBy('month')
             ->get()
-            ->map(function ($item) {
+            ->map(function (object $item): array {
                 return [
-                    'month' => $item->month,
-                    'count' => $item->count,
+                    'month' => (string) $item->month,
+                    'count' => (int) $item->count,
                 ];
-            });
+            })
+            ->toArray();
 
         $roleAssignments = DB::table('users')
             ->join('roles', 'users.role_id', '=', 'roles.id')
@@ -133,7 +148,8 @@ class AnalyticsController extends Controller
                     })->toArray(),
                 ];
             })
-            ->values();
+            ->values()
+            ->toArray();
 
         return [
             'users_by_month' => $userGrowth,

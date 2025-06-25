@@ -1,4 +1,4 @@
-import { type NavItem, type SharedData } from '@/core/types';
+import { User, type NavItem, type SharedData } from '@/core/types';
 import { NavUser } from '@/modules/users/components/nav-user';
 import { NavMain } from '@/shared/components/nav-main';
 import {
@@ -16,7 +16,7 @@ import AppLogo from './app-logo';
 
 export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
-    const user = auth.user as any;
+    const user = auth?.user as User;
 
     const mainNavItems: NavItem[] = [
         {
@@ -31,7 +31,6 @@ export function AppSidebar() {
         },
     ];
 
-    // Add superadmin-only navigation items
     if (user?.role?.slug === 'superadmin') {
         mainNavItems.push({
             title: 'Analytics',

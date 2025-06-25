@@ -7,12 +7,12 @@ use App\Modules\Users\Models\User;
 use App\Modules\Users\Requests\StoreUserRequest;
 use App\Modules\Users\Requests\UpdateUserRequest;
 use App\Modules\Users\Resources\UserResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\JsonResponse;
-use App\Role;
 
 class UserController extends Controller
 {
@@ -61,7 +61,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
         $user = User::create($request->validated());
 
@@ -92,7 +92,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $user->update($request->validated());
 
@@ -103,7 +103,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         $user->delete();
 
@@ -114,7 +114,7 @@ class UserController extends Controller
     /**
      * Get stats for the module.
      */
-    public function stats()
+    public function stats(): JsonResponse
     {
         return response()->json([
             'total' => User::count(),
@@ -127,7 +127,7 @@ class UserController extends Controller
     /**
      * Get data for the module.
      */
-    public function data(Request $request)
+    public function data(Request $request): AnonymousResourceCollection
     {
         $users = User::query()
             ->when($request->search, function ($query, $search) {
@@ -146,6 +146,4 @@ class UserController extends Controller
 
         return UserResource::collection($users);
     }
-
-
 }

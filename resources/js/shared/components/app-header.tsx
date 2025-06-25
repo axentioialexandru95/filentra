@@ -1,6 +1,6 @@
 import { useInitials } from '@/core/hooks/use-initials';
 import { cn } from '@/core/lib/utils';
-import { type BreadcrumbItem, type NavItem, type SharedData } from '@/core/types';
+import { type BreadcrumbItem, type NavItem, type SharedData, type User } from '@/core/types';
 import { UserMenuContent } from '@/modules/users/components/user-menu-content';
 import { Breadcrumbs } from '@/shared/components/breadcrumbs';
 import { Icon } from '@/shared/components/icon';
@@ -164,15 +164,15 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="size-10 rounded-full p-1">
                                     <Avatar className="size-8 overflow-hidden rounded-full">
-                                        <AvatarImage src={auth.user.avatar} alt={auth.user.name} />
+                                        <AvatarImage src={auth?.user?.avatar} alt={auth?.user?.name} />
                                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                            {getInitials(auth.user.name)}
+                                            {getInitials(auth?.user?.name ?? '')}
                                         </AvatarFallback>
                                     </Avatar>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="end">
-                                <UserMenuContent user={auth.user} />
+                                <UserMenuContent user={auth?.user as User} />
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Users;
+namespace App\Modules\RBAC;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
-class UsersServiceProvider extends ServiceProvider
+class RBACServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -20,16 +20,18 @@ class UsersServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Load routes with web middleware group
-        Route::middleware('web')
+        // Load routes with middleware
+        Route::middleware(['auth', 'verified', 'rbac.access'])
+            ->prefix('rbac')
+            ->name('rbac.')
             ->group(__DIR__ . '/routes.php');
 
         // Load views if needed
-        // $this->loadViewsFrom(__DIR__ . '/views', 'users');
+        // $this->loadViewsFrom(__DIR__ . '/views', 'rbac');
 
         // Publish assets if needed
         // $this->publishes([
-        //     __DIR__ . '/assets' => public_path('modules/users'),
-        // ], 'users-assets');
+        //     __DIR__ . '/assets' => public_path('modules/rbac'),
+        // ], 'rbac-assets');
     }
 }

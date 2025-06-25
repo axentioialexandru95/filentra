@@ -1,5 +1,5 @@
 import { useIsMobile } from '@/core/hooks/use-mobile';
-import { type SharedData } from '@/core/types';
+import { User, type SharedData } from '@/core/types';
 import { UserInfo } from '@/modules/users/components/user-info';
 import { UserMenuContent } from '@/modules/users/components/user-menu-content';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/components/ui/dropdown-menu';
@@ -18,7 +18,7 @@ export function NavUser() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton size="lg" className="group text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent">
-                            <UserInfo user={auth.user} />
+                            <UserInfo user={auth?.user as User} />
                             <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
@@ -27,7 +27,7 @@ export function NavUser() {
                         align="end"
                         side={isMobile ? 'bottom' : state === 'collapsed' ? 'left' : 'bottom'}
                     >
-                        <UserMenuContent user={auth.user} />
+                        <UserMenuContent user={auth?.user as User} />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

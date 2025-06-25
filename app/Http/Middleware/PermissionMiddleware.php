@@ -15,12 +15,12 @@ class PermissionMiddleware
      */
     public function handle(Request $request, Closure $next, string ...$permissions): Response
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 
         $user = auth()->user();
-        
+
         // Check if user has any of the required permissions
         $hasPermission = false;
         foreach ($permissions as $permission) {
@@ -30,7 +30,7 @@ class PermissionMiddleware
             }
         }
 
-        if (!$hasPermission) {
+        if (! $hasPermission) {
             abort(403, 'Insufficient permissions. Required permission: ' . implode(' or ', $permissions));
         }
 

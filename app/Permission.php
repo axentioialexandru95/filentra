@@ -5,10 +5,19 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Query\Builder;
 
 class Permission extends Model
 {
+    /** @use HasFactory<\Database\Factories\PermissionFactory> */
     use HasFactory;
+
+    /**
+     * The model's factory class.
+     */
+    protected static string $factory = \Database\Factories\PermissionFactory::class;
+
+    protected $table = 'permissions';
 
     protected $fillable = [
         'name',
@@ -24,6 +33,8 @@ class Permission extends Model
 
     /**
      * Get roles that have this permission
+     *
+     * @return BelongsToMany<Role>
      */
     public function roles(): BelongsToMany
     {
@@ -33,7 +44,7 @@ class Permission extends Model
     /**
      * Scope for active permissions only
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
@@ -41,7 +52,7 @@ class Permission extends Model
     /**
      * Scope for permissions by category
      */
-    public function scopeByCategory($query, string $category)
+    public function scopeByCategory(Builder $query, string $category): Builder
     {
         return $query->where('category', $category);
     }

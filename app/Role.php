@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Role extends Model
 {
+    /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -27,6 +29,8 @@ class Role extends Model
 
     /**
      * Get users with this role
+     *
+     * @return HasMany<User>
      */
     public function users(): HasMany
     {
@@ -35,6 +39,8 @@ class Role extends Model
 
     /**
      * Get permissions for this role
+     *
+     * @return BelongsToMany<Permission>
      */
     public function permissions(): BelongsToMany
     {
@@ -68,7 +74,7 @@ class Role extends Model
     /**
      * Scope for active roles only
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }

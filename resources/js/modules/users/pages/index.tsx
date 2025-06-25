@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import AppLayout from '@/shared/layouts/app-layout';
 import { UserCheck } from 'lucide-react';
 
-import { type User } from '../types';
+import { type User } from '@/core/types';
 
 interface UsersIndexProps {
     data: {
@@ -39,8 +39,8 @@ interface UsersIndexProps {
 export default function UsersIndex({ data: users, stats, filters }: UsersIndexProps) {
     const [search, setSearch] = useState(filters.search || '');
     const [status, setStatus] = useState(filters.status || 'all');
-    const { auth } = usePage<any>().props;
-    const currentUser = auth.user as any;
+    const { auth } = usePage<{ auth?: { user?: User } }>().props;
+    const currentUser = auth?.user;
 
     const usersIndexRoute = route('users.index');
     const usersCreateRoute = route('users.create');
@@ -107,7 +107,8 @@ export default function UsersIndex({ data: users, stats, filters }: UsersIndexPr
         return true;
     };
 
-    const formatDate = (dateString: string) => {
+    const formatDate = (dateString: string | undefined) => {
+        if (!dateString) return 'N/A';
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',

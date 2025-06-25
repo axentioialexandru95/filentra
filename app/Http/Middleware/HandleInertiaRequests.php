@@ -59,7 +59,19 @@ class HandleInertiaRequests extends Middleware
                     ] : null,
                     'role_name' => $user->getRoleName(),
                     'is_superadmin' => $user->isSuperAdmin(),
+                    'permissions' => $user->getPermissions()->map(function ($permission) {
+                        return [
+                            'id' => $permission->id,
+                            'name' => $permission->name,
+                            'slug' => $permission->slug,
+                            'category' => $permission->category,
+                        ];
+                    }),
                 ] : null,
+            ],
+            'rbac_config' => [
+                'access' => config('rbac.access'),
+                'features' => config('rbac.features'),
             ],
             'ziggy' => fn (): array => [
                 ...(new Ziggy())->toArray(),

@@ -14,7 +14,7 @@ class UserFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var class-string<\Illuminate\Database\Eloquent\Model>
+     * @var class-string<\App\Modules\Users\Models\User>
      */
     protected $model = \App\Modules\Users\Models\User::class;
 
