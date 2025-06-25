@@ -27,6 +27,6 @@ initializeTheme();
 // Register service worker for PWA functionality (caching and offline support)
 if ('serviceWorker' in navigator) {
     registerSW({
-        immediate: true
+        immediate: true,
     });
 }
