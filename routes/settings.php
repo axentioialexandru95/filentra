@@ -5,6 +5,7 @@ use App\Modules\Settings\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// Settings routes
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', 'settings/profile');
 

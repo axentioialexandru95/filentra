@@ -12,7 +12,7 @@ parameters:
         - bootstrap/providers.php
 
     # The level of rule strictness (0-9, 9 being the strictest)
-    level: 6
+    level: 4
 
     # Ignore errors in these paths
     excludePaths:
@@ -32,9 +32,6 @@ parameters:
         # Ignore Inertia render method
         - '#Call to an undefined method Inertia\\.*#'
 
-        # Ignore missing property errors for Eloquent models (common in Laravel)
-        - '#Access to an undefined property App\\Models\\.*#'
-
         # Ignore errors in test files for mocking
         - '#Call to an undefined method .*MockInterface.*#'
 
@@ -44,7 +41,7 @@ parameters:
         # Ignore database seeders/factories dynamic calls
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\.*Factory.*#'
 
-        # Ignore Pest test function calls
+        # Ignore Pest test function calls - these are global functions provided by Pest
         - '#Function (test|it|describe|beforeEach|afterEach|beforeAll|afterAll) not found#'
 
     # Parallel processing

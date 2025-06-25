@@ -7,7 +7,10 @@ use App\Modules\Users\Models\User;
 use App\Modules\Users\Requests\StoreUserRequest;
 use App\Modules\Users\Requests\UpdateUserRequest;
 use App\Modules\Users\Resources\UserResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,7 +21,7 @@ class UserController extends Controller
      */
     public function index(Request $request): Response
     {
-        $users = User::query()
+        $users = User::with('role')
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
@@ -40,10 +43,14 @@ class UserController extends Controller
             'recent' => User::whereDate('created_at', '>=', now()->subDays(7))->count(),
         ];
 
+        // Get all available roles for create user dialog
+        $roles = \App\Role::orderBy('name')->get();
+
         return Inertia::render('modules/users/pages/index', [
             'data' => $users,
             'stats' => $stats,
             'filters' => $request->only(['search', 'status']),
+            'roles' => $roles,
         ]);
     }
 
@@ -52,18 +59,36 @@ class UserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('modules/users/pages/create');
+        // Get all available roles for superadmin to assign
+        $roles = \App\Role::orderBy('name')->get();
+
+        return Inertia::render('modules/users/pages/create', [
+            'roles' => $roles,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        $user = User::create($request->validated());
+        $validatedData = $request->validated();
+
+        // Auto-verify users created by superadmin
+        $validatedData['email_verified_at'] = now();
+
+        $user = User::create($validatedData);
+
+        // Assign the selected role
+        if (isset($validatedData['role_id'])) {
+            $role = \App\Role::find($validatedData['role_id']);
+            if ($role) {
+                $user->roles()->sync([$role->id]);
+            }
+        }
 
         return redirect()->route('users.index')
-            ->with('success', 'User created successfully.');
+            ->with('success', 'User created successfully and verified.');
     }
 
     /**
@@ -72,7 +97,7 @@ class UserController extends Controller
     public function show(User $user): Response
     {
         return Inertia::render('modules/users/pages/show', [
-            'item' => new UserResource($user),
+            'user' => new UserResource($user),
         ]);
     }
 
@@ -82,14 +107,14 @@ class UserController extends Controller
     public function edit(User $user): Response
     {
         return Inertia::render('modules/users/pages/edit', [
-            'item' => new UserResource($user),
+            'user' => new UserResource($user),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $user->update($request->validated());
 
@@ -100,7 +125,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         $user->delete();
 
@@ -111,7 +136,7 @@ class UserController extends Controller
     /**
      * Get stats for the module.
      */
-    public function stats()
+    public function stats(): JsonResponse
     {
         return response()->json([
             'total' => User::count(),
@@ -124,7 +149,7 @@ class UserController extends Controller
     /**
      * Get data for the module.
      */
-    public function data(Request $request)
+    public function data(Request $request): AnonymousResourceCollection
     {
         $users = User::query()
             ->when($request->search, function ($query, $search) {

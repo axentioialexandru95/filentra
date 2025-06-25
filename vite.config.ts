@@ -14,6 +14,18 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
+    server: {
+        host: 'filentra.test',
+        port: 5173,
+        hmr: {
+            port: 5173,
+            host: 'filentra.test',
+        },
+        // Alternative for Herd - uncomment if still having issues
+        // watch: {
+        //     usePolling: true,
+        // },
+    },
     esbuild: {
         jsx: 'automatic',
     },
@@ -21,5 +33,8 @@ export default defineConfig({
         alias: {
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
+    },
+    define: {
+        global: 'globalThis',
     },
 });

@@ -9,6 +9,7 @@ test('profile page is displayed', function () {
 
     $response = $this
         ->actingAs($user)
+        ->withSession([])
         ->get('/settings/profile');
 
     $response->assertOk();
@@ -57,6 +58,7 @@ test('user can delete their account', function () {
 
     $response = $this
         ->actingAs($user)
+        ->withSession([])
         ->delete('/settings/profile', [
             'password' => 'password',
         ]);

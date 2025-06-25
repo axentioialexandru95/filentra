@@ -17,9 +17,9 @@ class ModuleGeneratorService
 
     public function __construct()
     {
-        $this->backendGenerator = new BackendGenerator;
-        $this->frontendGenerator = new FrontendGenerator;
-        $this->databaseGenerator = new DatabaseGenerator;
+        $this->backendGenerator = new BackendGenerator();
+        $this->frontendGenerator = new FrontendGenerator();
+        $this->databaseGenerator = new DatabaseGenerator();
     }
 
     /**

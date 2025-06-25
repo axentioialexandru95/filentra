@@ -24,14 +24,14 @@ export function FeatureCard({ icon: Icon, title, description, features, color, i
                 <CardHeader className="relative">
                     <div className="flex items-center space-x-3">
                         <motion.div
-                            className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-lg transition-all duration-300`}
+                            className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-lg transition-all duration-300 sm:h-12 sm:w-12`}
                             whileHover={{ scale: 1.1 }}
                         >
-                            <Icon className="h-6 w-6" />
+                            <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                         </motion.div>
-                        <CardTitle className="text-xl transition-colors duration-300 group-hover:text-primary">{title}</CardTitle>
+                        <CardTitle className="text-lg transition-colors duration-300 group-hover:text-primary sm:text-xl">{title}</CardTitle>
                     </div>
-                    <CardDescription className="text-base leading-relaxed">{description}</CardDescription>
+                    <CardDescription className="text-sm leading-relaxed sm:text-base">{description}</CardDescription>
                 </CardHeader>
                 <CardContent className="relative">
                     <ul className="space-y-3">
@@ -46,7 +46,7 @@ export function FeatureCard({ icon: Icon, title, description, features, color, i
                                 <motion.div whileHover={{ scale: 1.1 }}>
                                     <CheckCircle className="h-4 w-4 text-green-500 transition-transform duration-200" />
                                 </motion.div>
-                                <span className="text-sm text-muted-foreground transition-colors duration-200 group-hover/item:text-foreground">
+                                <span className="text-xs text-muted-foreground transition-colors duration-200 group-hover/item:text-foreground sm:text-sm">
                                     {item}
                                 </span>
                             </motion.li>

@@ -163,7 +163,7 @@ export default function Index() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="{$titleCaseName}" />
 
-            <div className="space-y-6">
+            <div className="p-6 space-y-6">
                 <div>
                     <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
                         {$titleCaseName}
@@ -252,7 +252,7 @@ export default function Index({ data, stats, filters }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="{$titleCaseName}" />
 
-            <div className="space-y-6">
+            <div className="p-6 space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
@@ -319,7 +319,7 @@ export default function Create() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create {$titleCaseName}" />
 
-            <div className="space-y-6">
+            <div className="p-6 space-y-6">
                 <div>
                     <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
                         Create {$titleCaseName}

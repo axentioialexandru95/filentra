@@ -28,9 +28,13 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     const { auth } = usePage<SharedData>().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
-        name: auth.user.name,
-        email: auth.user.email,
+        name: auth?.user?.name || '',
+        email: auth?.user?.email || '',
     });
+
+    if (!auth?.user) {
+        return null;
+    }
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();

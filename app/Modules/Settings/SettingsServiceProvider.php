@@ -19,8 +19,8 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Load routes
-        $this->loadRoutesFrom(__DIR__.'/routes.php');
+        // Load routes from module
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
 
         // Load views if needed
         // $this->loadViewsFrom(__DIR__ . '/views', 'settings');

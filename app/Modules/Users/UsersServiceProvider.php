@@ -2,6 +2,7 @@
 
 namespace App\Modules\Users;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class UsersServiceProvider extends ServiceProvider
@@ -19,8 +20,9 @@ class UsersServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Load routes
-        $this->loadRoutesFrom(__DIR__.'/routes.php');
+        // Load routes with web middleware group
+        Route::middleware('web')
+            ->group(__DIR__.'/routes.php');
 
         // Load views if needed
         // $this->loadViewsFrom(__DIR__ . '/views', 'users');
