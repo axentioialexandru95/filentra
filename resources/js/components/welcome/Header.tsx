@@ -27,17 +27,17 @@ export function Header({ isDark, toggleTheme, auth }: HeaderProps) {
                     <div className="flex items-center space-x-2 sm:space-x-3">
                         <motion.div className="relative" whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
                             <motion.div
-                                className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 opacity-75 blur-sm"
+                                className="absolute inset-0 rounded-lg bg-gradient-to-br from-green-600 to-blue-600 opacity-75 blur-sm"
                                 animate={{ opacity: [0.75, 0.9, 0.75] }}
                                 transition={{ duration: 2, repeat: Infinity }}
                             />
-                            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 text-xs font-bold text-white shadow-lg sm:h-10 sm:w-10 sm:text-sm">
-                                F
+                            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-green-600 to-blue-600 text-xs font-bold text-white shadow-lg sm:h-10 sm:w-10 sm:text-sm">
+                                R
                             </div>
                         </motion.div>
                         <div className="flex items-center">
-                            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-xl font-bold text-transparent sm:text-2xl">
-                                Filentra
+                            <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-xl font-bold text-transparent sm:text-2xl">
+                                Reflux
                             </span>
                             <motion.div animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity }} className="inline-block">
                                 <Badge variant="secondary" className="ml-1 text-xs sm:ml-2">

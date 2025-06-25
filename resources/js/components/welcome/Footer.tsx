@@ -14,20 +14,20 @@ export function Footer() {
                     <div className="flex items-center space-x-4">
                         <motion.div className="relative" whileHover={{ scale: 1.1 }} transition={{ type: 'spring', stiffness: 300 }}>
                             <motion.div
-                                className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 opacity-50 blur-sm"
+                                className="absolute inset-0 rounded-lg bg-gradient-to-br from-green-600 to-blue-600 opacity-50 blur-sm"
                                 animate={{ opacity: [0.5, 0.7, 0.5] }}
                                 transition={{ duration: 3, repeat: Infinity }}
                             />
-                            <div className="relative flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 text-xs font-bold text-white sm:h-8 sm:w-8 sm:text-sm">
-                                F
+                            <div className="relative flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-green-600 to-blue-600 text-xs font-bold text-white sm:h-8 sm:w-8 sm:text-sm">
+                                R
                             </div>
                         </motion.div>
                         <div>
-                            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-lg font-bold text-transparent sm:text-xl">
-                                Filentra
+                            <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-lg font-bold text-transparent sm:text-xl">
+                                Reflux
                             </span>
                             <Badge variant="outline" className="ml-2 text-xs">
-                                Beta
+                                Enterprise
                             </Badge>
                         </div>
                     </div>
@@ -37,7 +37,7 @@ export function Footer() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.3 }}
                     >
-                        Built with Laravel 12 + React 19 + TypeScript
+                        © 2024 Reflux. All rights reserved. | Advanced Reverse Logistics Platform
                     </motion.div>
                 </motion.div>
             </div>

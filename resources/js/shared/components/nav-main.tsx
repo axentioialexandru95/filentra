@@ -23,7 +23,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
     const user = page.props.auth?.user as User;
 
     const rbacItems = getFilteredRBACItems(rbacConfig);
-    const showRBACSection = canAccessRBAC && RBAC_NAVIGATION.canAccess(rbacConfig) && rbacItems.length > 0;
+    const showRBACSection = canAccessRBAC && RBAC_NAVIGATION.canAccess(rbacConfig, user) && rbacItems.length > 0;
 
     // Check if vendors nav item should be shown
     const showVendorsNavItem = VENDORS_NAV_ITEM.canAccess(rbacConfig, user);
