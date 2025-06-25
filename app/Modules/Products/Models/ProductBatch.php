@@ -74,6 +74,16 @@ class ProductBatch extends Model
     }
 
     /**
+     * Get the user who created the batch (alias for vendor)
+     *
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    /**
      * Get the user who reviewed the batch
      *
      * @return BelongsTo<User, $this>

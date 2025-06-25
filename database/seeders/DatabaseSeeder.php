@@ -14,9 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Run role and permission seeder first
+        // Run seeders in the correct order
         $this->call([
             RolePermissionSeeder::class,
+            VendorProductSeeder::class,
         ]);
 
         // Get or create admin user with superadmin role
@@ -34,5 +35,6 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info("Admin user created/updated: {$adminUser->email}");
         $this->command->info("Role assigned: {$superAdminRole->name}");
+        $this->command->info("Database seeding completed successfully!");
     }
 }

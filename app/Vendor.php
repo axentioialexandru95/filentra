@@ -45,10 +45,10 @@ class Vendor extends Model
         return $this->hasManyThrough(
             Product::class,
             User::class,
-            'vendor_id',
-            'user_id',
-            'id',
-            'id'
+            'vendor_id', // Foreign key on users table
+            'vendor_id', // Foreign key on products table
+            'id', // Local key on vendors table
+            'id' // Local key on users table
         );
     }
 
@@ -60,10 +60,10 @@ class Vendor extends Model
         return $this->hasManyThrough(
             ProductBatch::class,
             User::class,
-            'vendor_id',
-            'user_id',
-            'id',
-            'id'
+            'vendor_id', // Foreign key on users table
+            'vendor_id', // Foreign key on product_batches table
+            'id', // Local key on vendors table
+            'id' // Local key on users table
         );
     }
 

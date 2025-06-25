@@ -52,12 +52,12 @@ export interface VendorBatch {
 export interface VendorFormData {
     name: string;
     company_email: string;
-    phone?: string;
-    address?: string;
-    contact_person?: string;
-    registration_number?: string;
+    phone: string;
+    address: string;
+    contact_person: string;
+    registration_number: string;
     status: 'active' | 'inactive' | 'pending';
-    description?: string;
+    description: string;
 }
 
 // Page props interfaces

@@ -144,6 +144,13 @@ export interface ProductShowProps {
 
 export interface BatchShowProps {
     batch: ProductBatch;
+    products: PaginatedResponse<Product>;
+    filters: {
+        search?: string;
+        status?: ProductStatus | 'all';
+        quality?: QualityRating | 'all';
+        condition?: ProductCondition | 'all';
+    };
     can_edit: boolean;
     can_delete: boolean;
     can_review: boolean;

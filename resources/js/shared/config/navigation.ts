@@ -8,6 +8,15 @@ export interface NavigationItem {
     isActive: (url: string) => boolean;
 }
 
+export interface SimpleNavigationItem {
+    key: string;
+    label: string;
+    icon: typeof Building2;
+    routeName: string;
+    tooltip: string;
+    canAccess: (rbacConfig: RBACConfig, user?: User) => boolean;
+}
+
 export interface NavigationSection {
     key: string;
     label: string;
@@ -19,32 +28,17 @@ export interface NavigationSection {
 }
 
 /**
- * Vendors Navigation Configuration (Admin/Superadmin only)
+ * Vendors Navigation Item (Admin/Superadmin only)
  */
-export const VENDORS_NAVIGATION: NavigationSection = {
+export const VENDORS_NAV_ITEM: SimpleNavigationItem = {
     key: 'vendors',
     label: 'Vendors',
     icon: Building2,
+    routeName: 'vendors.index',
     tooltip: 'Vendor Management',
-    isOpen: (url: string) => url.startsWith('/vendors'),
     canAccess: (rbacConfig: RBACConfig, user?: User) => {
-        // Only admin and superadmin can access vendor management
         return user?.role?.slug === 'admin' || user?.role?.slug === 'superadmin';
     },
-    items: [
-        {
-            label: 'All Vendors',
-            routeName: 'vendors.index',
-            urlPattern: '/vendors',
-            isActive: (url: string) => url === '/vendors' || url.startsWith('/vendors?'),
-        },
-        {
-            label: 'Add Vendor',
-            routeName: 'vendors.create',
-            urlPattern: '/vendors/create',
-            isActive: (url: string) => url === '/vendors/create',
-        },
-    ],
 };
 
 /**
@@ -192,5 +186,5 @@ export const getFilteredRBACItems = (rbacConfig: RBACConfig): NavigationItem[] =
  * Get all navigation sections based on user role
  */
 export const getAllNavigationSections = (): NavigationSection[] => {
-    return [VENDORS_NAVIGATION, PRODUCTS_NAVIGATION, BATCHES_NAVIGATION, RBAC_NAVIGATION];
+    return [PRODUCTS_NAVIGATION, BATCHES_NAVIGATION, RBAC_NAVIGATION];
 };

@@ -77,7 +77,7 @@ export default function BatchesIndex({ data, stats, filters, can_create_batch, c
 
     const sendForReview = (batchId: number) => {
         router.patch(
-            route('batches.send-for-review', { batchId }),
+            route('batches.send-for-review', { batch: batchId }),
             {},
             {
                 preserveState: true,
@@ -87,7 +87,7 @@ export default function BatchesIndex({ data, stats, filters, can_create_batch, c
 
     const reviewBatch = (batchId: number, status: 'approved' | 'rejected', notes?: string) => {
         router.patch(
-            route('batches.review', { batchId }),
+            route('batches.review', { batch: batchId }),
             {
                 status,
                 notes,
@@ -257,7 +257,7 @@ export default function BatchesIndex({ data, stats, filters, can_create_batch, c
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex items-center space-x-2">
-                                                <Link href={route('batches.show', { batchId: batch.id })}>
+                                                <Link href={route('batches.show', { batch: batch.id })}>
                                                     <Button variant="ghost" size="sm">
                                                         <Eye className="h-4 w-4" />
                                                     </Button>

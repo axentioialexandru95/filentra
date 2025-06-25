@@ -126,14 +126,51 @@ class BatchController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductBatch $batch): Response
+    public function show(Request $request, ProductBatch $batch): Response
     {
         $this->authorizeBatchAccess($batch);
 
-        $batch->load(['vendor', 'reviewer', 'products.vendor']);
+        $batch->load(['vendor', 'reviewer']);
+
+        // Paginate products within the batch
+        $products = $batch->products()
+            ->with(['vendor'])
+            ->when($request->search, function ($q, $search) {
+                $q->where(function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('sku', 'like', "%{$search}%")
+                        ->orWhere('asin', 'like', "%{$search}%")
+                        ->orWhere('brand', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->status, function ($q, $status) {
+                $q->where('status', $status);
+            })
+            ->when($request->quality, function ($q, $quality) {
+                $q->where('quality_rating', $quality);
+            })
+            ->when($request->condition, function ($q, $condition) {
+                $q->where('condition', $condition);
+            })
+            ->latest()
+            ->paginate(25); // Show 25 products per page
 
         return Inertia::render('modules/products/pages/batches/show', [
             'batch' => new BatchResource($batch),
+            'products' => [
+                'data' => $products->items(),
+                'current_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'total' => $products->total(),
+                'per_page' => $products->perPage(),
+                'from' => $products->firstItem(),
+                'to' => $products->lastItem(),
+                'links' => $products->linkCollection(),
+            ],
+            'filters' => $request->only(['search', 'status', 'quality', 'condition']),
+            'can_edit' => $batch->status === 'draft',
+            'can_delete' => $batch->status === 'draft',
+            'can_review' => Auth::user()->hasRole('admin') || Auth::user()->isSuperAdmin(),
         ]);
     }
 

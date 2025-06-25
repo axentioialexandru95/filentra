@@ -10,6 +10,7 @@ import { Input } from '@/shared/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 import AppLayout from '@/shared/layouts/app-layout';
 
+import { CreateVendorDialog } from '../components';
 import { type VendorsIndexProps } from '../types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -72,35 +73,33 @@ export default function VendorsIndex({ vendors, stats, filters }: VendorsIndexPr
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Vendor Management" />
 
-            <div className="space-y-6 p-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight">Vendor Management</h2>
-                        <p className="text-muted-foreground">Manage vendor businesses and their operations</p>
+            <div className="space-y-4 p-4 sm:space-y-6 sm:p-6">
+                {/* Header Section - Responsive */}
+                <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                    <div className="space-y-1">
+                        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Vendor Management</h2>
+                        <p className="text-sm text-muted-foreground sm:text-base">Manage vendor businesses and their operations</p>
                     </div>
-                    <Link href={route('vendors.create')}>
-                        <Button>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Vendor
-                        </Button>
-                    </Link>
+                    <div className="flex justify-end">
+                        <CreateVendorDialog />
+                    </div>
                 </div>
 
-                {/* Stats Cards */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
+                {/* Stats Cards - Improved Responsive Grid */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                    <Card className="transition-all duration-200 hover:shadow-md">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Total Vendors</CardTitle>
-                            <Building2 className="h-4 w-4 text-muted-foreground" />
+                            <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{stats.total}</div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="transition-all duration-200 hover:shadow-md">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Active</CardTitle>
-                            <Badge variant="default" className="h-4 px-1 text-xs">
+                            <Badge variant="default" className="h-4 shrink-0 px-1 text-xs">
                                 Active
                             </Badge>
                         </CardHeader>
@@ -108,10 +107,10 @@ export default function VendorsIndex({ vendors, stats, filters }: VendorsIndexPr
                             <div className="text-2xl font-bold">{stats.active}</div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="transition-all duration-200 hover:shadow-md">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Inactive</CardTitle>
-                            <Badge variant="secondary" className="h-4 px-1 text-xs">
+                            <Badge variant="secondary" className="h-4 shrink-0 px-1 text-xs">
                                 Inactive
                             </Badge>
                         </CardHeader>
@@ -119,10 +118,10 @@ export default function VendorsIndex({ vendors, stats, filters }: VendorsIndexPr
                             <div className="text-2xl font-bold">{stats.inactive}</div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="transition-all duration-200 hover:shadow-md">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Pending</CardTitle>
-                            <Badge variant="outline" className="h-4 px-1 text-xs">
+                            <Badge variant="outline" className="h-4 shrink-0 px-1 text-xs">
                                 Pending
                             </Badge>
                         </CardHeader>
@@ -132,77 +131,84 @@ export default function VendorsIndex({ vendors, stats, filters }: VendorsIndexPr
                     </Card>
                 </div>
 
-                {/* Search and Filters */}
+                {/* Search and Filters - Improved Mobile Layout */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Search & Filter</CardTitle>
                         <CardDescription>Find vendors by name, email, or contact person</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="flex gap-4">
-                            <div className="flex-1">
+                        <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+                            <div className="min-w-0 flex-1">
                                 <Input
                                     placeholder="Search vendors..."
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                                    className="w-full"
                                 />
                             </div>
-                            <Select value={status} onValueChange={setStatus}>
-                                <SelectTrigger className="w-48">
-                                    <SelectValue placeholder="Filter by status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">All Statuses</SelectItem>
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="inactive">Inactive</SelectItem>
-                                    <SelectItem value="pending">Pending</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Button onClick={handleSearch}>
-                                <Search className="mr-2 h-4 w-4" />
-                                Search
-                            </Button>
-                            <Button variant="outline" onClick={handleReset}>
-                                Reset
-                            </Button>
+                            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2 lg:flex-row lg:space-x-2">
+                                <Select value={status} onValueChange={setStatus}>
+                                    <SelectTrigger className="w-full sm:w-48">
+                                        <SelectValue placeholder="Filter by status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">All Statuses</SelectItem>
+                                        <SelectItem value="active">Active</SelectItem>
+                                        <SelectItem value="inactive">Inactive</SelectItem>
+                                        <SelectItem value="pending">Pending</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <div className="flex space-x-2">
+                                    <Button onClick={handleSearch} className="flex-1 sm:flex-none">
+                                        <Search className="mr-2 h-4 w-4" />
+                                        Search
+                                    </Button>
+                                    <Button variant="outline" onClick={handleReset} className="flex-1 sm:flex-none">
+                                        Reset
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
 
-                {/* Vendors List */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {/* Vendors List - Better Responsive Grid */}
+                <div className="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
                     {vendors.data.map((vendor) => (
-                        <Card key={vendor.id} className="transition-shadow hover:shadow-lg">
-                            <CardHeader>
-                                <div className="flex items-start justify-between">
-                                    <div className="space-y-1">
-                                        <CardTitle className="text-lg">{vendor.name}</CardTitle>
-                                        <CardDescription className="flex items-center gap-1">
-                                            <Mail className="h-3 w-3" />
-                                            {vendor.company_email}
+                        <Card key={vendor.id} className="transition-all duration-200 hover:shadow-lg">
+                            <CardHeader className="pb-4">
+                                <div className="flex items-start justify-between space-x-4">
+                                    <div className="min-w-0 flex-1 space-y-1">
+                                        <CardTitle className="text-lg leading-tight">{vendor.name}</CardTitle>
+                                        <CardDescription className="flex items-center gap-1 text-sm break-all">
+                                            <Mail className="h-3 w-3 shrink-0" />
+                                            <span className="truncate">{vendor.company_email}</span>
                                         </CardDescription>
                                     </div>
-                                    <Badge variant={getStatusBadgeVariant(vendor.status)}>{vendor.status}</Badge>
+                                    <Badge variant={getStatusBadgeVariant(vendor.status)} className="shrink-0 capitalize">
+                                        {vendor.status}
+                                    </Badge>
                                 </div>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="pt-0">
                                 <div className="space-y-3">
                                     {vendor.contact_person && (
                                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <Users className="h-3 w-3" />
-                                            {vendor.contact_person}
+                                            <Users className="h-3 w-3 shrink-0" />
+                                            <span className="truncate">{vendor.contact_person}</span>
                                         </div>
                                     )}
                                     {vendor.phone && (
                                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <Phone className="h-3 w-3" />
-                                            {vendor.phone}
+                                            <Phone className="h-3 w-3 shrink-0" />
+                                            <span className="truncate">{vendor.phone}</span>
                                         </div>
                                     )}
 
                                     {vendor.stats && (
-                                        <div className="grid grid-cols-3 gap-2 border-t pt-2">
+                                        <div className="grid grid-cols-3 gap-2 border-t pt-3">
                                             <div className="text-center">
                                                 <div className="text-lg font-semibold">{vendor.stats.total_users}</div>
                                                 <div className="text-xs text-muted-foreground">Users</div>
@@ -218,10 +224,10 @@ export default function VendorsIndex({ vendors, stats, filters }: VendorsIndexPr
                                         </div>
                                     )}
 
-                                    <div className="flex items-center justify-between pt-3">
+                                    <div className="flex flex-col space-y-2 pt-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                                         <span className="text-xs text-muted-foreground">Created {formatDate(vendor.created_at)}</span>
                                         <Link href={route('vendors.show', { vendor: vendor.id })}>
-                                            <Button variant="outline" size="sm">
+                                            <Button variant="outline" size="sm" className="w-full sm:w-auto">
                                                 <Eye className="mr-1 h-3 w-3" />
                                                 View
                                             </Button>
@@ -233,29 +239,32 @@ export default function VendorsIndex({ vendors, stats, filters }: VendorsIndexPr
                     ))}
                 </div>
 
+                {/* Empty State */}
                 {vendors.data.length === 0 && (
                     <Card>
-                        <CardContent className="flex flex-col items-center justify-center py-12">
+                        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
                             <Building2 className="mb-4 h-12 w-12 text-muted-foreground" />
                             <h3 className="mb-2 text-lg font-semibold">No vendors found</h3>
-                            <p className="mb-4 text-center text-muted-foreground">
-                                {search || status ? 'No vendors match your current filters.' : 'Get started by adding your first vendor business.'}
+                            <p className="mb-4 max-w-md text-muted-foreground">
+                                {search || status !== 'all'
+                                    ? 'No vendors match your current filters.'
+                                    : 'Get started by adding your first vendor business.'}
                             </p>
-                            {!search && !status && (
-                                <Link href={route('vendors.create')}>
+                            {!search && status === 'all' && (
+                                <CreateVendorDialog>
                                     <Button>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Add First Vendor
                                     </Button>
-                                </Link>
+                                </CreateVendorDialog>
                             )}
                         </CardContent>
                     </Card>
                 )}
 
-                {/* Pagination */}
+                {/* Pagination - Responsive */}
                 {vendors.last_page > 1 && (
-                    <div className="flex items-center justify-center space-x-2">
+                    <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">
                         {vendors.links.map((link, index) => (
                             <Button
                                 key={index}
@@ -264,6 +273,7 @@ export default function VendorsIndex({ vendors, stats, filters }: VendorsIndexPr
                                 disabled={!link.url}
                                 onClick={() => link.url && router.visit(link.url)}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
+                                className="min-w-0 px-2 sm:px-3"
                             />
                         ))}
                     </div>

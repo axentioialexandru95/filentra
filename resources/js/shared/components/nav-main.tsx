@@ -12,7 +12,7 @@ import {
 } from '@/shared/components/ui/sidebar';
 import { Link, usePage } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
-import { BATCHES_NAVIGATION, getFilteredRBACItems, PRODUCTS_NAVIGATION, RBAC_NAVIGATION, VENDORS_NAVIGATION } from '../config/navigation';
+import { BATCHES_NAVIGATION, getFilteredRBACItems, PRODUCTS_NAVIGATION, RBAC_NAVIGATION, VENDORS_NAV_ITEM } from '../config/navigation';
 import { useRBACAccess } from '../hooks/use-rbac-access.hook';
 import { useRBACConfig } from '../hooks/use-rbac-config.hook';
 
@@ -25,8 +25,11 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
     const rbacItems = getFilteredRBACItems(rbacConfig);
     const showRBACSection = canAccessRBAC && RBAC_NAVIGATION.canAccess(rbacConfig) && rbacItems.length > 0;
 
-    // Get navigation sections based on user role
-    const navigationSections = [VENDORS_NAVIGATION, PRODUCTS_NAVIGATION, BATCHES_NAVIGATION];
+    // Check if vendors nav item should be shown
+    const showVendorsNavItem = VENDORS_NAV_ITEM.canAccess(rbacConfig, user);
+
+    // Get navigation sections based on user role (excluding vendors which is now a simple item)
+    const navigationSections = [PRODUCTS_NAVIGATION, BATCHES_NAVIGATION];
     const visibleSections = navigationSections.filter((section) => section.canAccess(rbacConfig, user));
 
     return (
@@ -43,6 +46,18 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 ))}
+
+                {/* Simple Vendors navigation item */}
+                {showVendorsNavItem && (
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild isActive={page.url.startsWith('/vendors')} tooltip={{ children: VENDORS_NAV_ITEM.tooltip }}>
+                            <Link href={route(VENDORS_NAV_ITEM.routeName)} prefetch>
+                                <VENDORS_NAV_ITEM.icon className="h-4 w-4" />
+                                <span>{VENDORS_NAV_ITEM.label}</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                )}
 
                 {/* Role-based navigation sections */}
                 {visibleSections.map((section) => (

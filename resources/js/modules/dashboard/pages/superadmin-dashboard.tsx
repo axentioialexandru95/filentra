@@ -1,66 +1,136 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { Activity, BarChart3, CheckCircle, Eye, MoreHorizontal, Plus, Shield, TrendingUp, UserCheck, Users, UserX } from 'lucide-react';
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Head, Link } from '@inertiajs/react';
+import { Activity, BarChart3, Building2, DollarSign, Eye, Package, Package2, PackageCheck, Shield, TrendingUp } from 'lucide-react';
+import { Area, AreaChart, CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
-import { getInitials } from '@/core/lib/utils';
-import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/shared/components/ui/chart';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/shared/components/ui/dropdown-menu';
 import { Progress } from '@/shared/components/ui/progress';
 import AppLayout from '@/shared/layouts/app-layout';
 
 interface SuperAdminDashboardProps {
-    analytics: {
-        users: {
-            total: number;
-            verified: number;
-            unverified: number;
-            recent: number;
-            active_today: number;
-            verification_rate: number;
-        };
-        roles: {
-            total: number;
-            with_users: number;
-            without_users: number;
-        };
-        permissions: {
-            total: number;
-            assigned: number;
-            categories: number;
-        };
+    platformAnalytics: {
+        total_users: number;
+        total_vendors: number;
+        active_vendors: number;
+        total_products: number;
+        unique_products: number;
+        total_batches: number;
+        active_batches: number;
+        platform_value: number;
     };
-    recentUsers: Array<{
-        id: number;
-        name: string;
-        email: string;
-        role: string;
-        role_slug: string;
-        verified: boolean;
-        created_at: string;
-        created_at_human: string;
-    }>;
-    usersByRole: Array<{
-        role: string;
-        slug: string;
-        users: number;
-        level: number;
-        percentage: number;
-    }>;
-    systemHealth: {
-        users_growth: Array<{
+    vendorAnalytics: {
+        top_vendors: Array<{
+            id: number;
+            name: string;
+            email: string;
+            products_count: number;
+            status: string;
+            created_at: string;
+        }>;
+        by_status: Record<string, number>;
+        new_this_month: number;
+        total_revenue_processed: number;
+    };
+    productAnalytics: {
+        by_status: Record<string, number>;
+        by_quality: Record<string, number>;
+        batches_by_status: Record<string, number>;
+        top_categories: Record<string, number>;
+        top_brands: Record<string, number>;
+        verified_products: number;
+        pending_review: number;
+        avg_batch_size: number;
+    };
+    rbacAnalytics: {
+        total_roles: number;
+        total_permissions: number;
+        users_by_role: Array<{
+            role: string;
+            slug: string;
+            users: number;
+            level: number;
+            percentage: number;
+        }>;
+        roles_with_users: number;
+        permissions_categories: number;
+    };
+    recentActivity: {
+        recent_batches: Array<{
+            id: number;
+            name: string;
+            vendor_name: string;
+            status: string;
+            products_count: number;
+            created_at: string;
+            created_at_human: string;
+        }>;
+        recent_vendors: Array<{
+            id: number;
+            name: string;
+            email: string;
+            status: string;
+            products_count: number;
+            created_at: string;
+            created_at_human: string;
+        }>;
+    };
+    chartData: {
+        product_growth: Array<{
             date: string;
             count: number;
         }>;
-        database_status: string;
-        last_updated: string;
+        batch_progress: Array<{
+            date: string;
+            total: number;
+            completed: number;
+            completion_rate: number;
+        }>;
+        revenue_trends: Array<{
+            date: string;
+            revenue: number;
+            products: number;
+        }>;
     };
 }
 
-export default function SuperAdminDashboard({ analytics, recentUsers, usersByRole, systemHealth }: SuperAdminDashboardProps) {
+export default function SuperAdminDashboard({
+    platformAnalytics,
+    vendorAnalytics,
+    productAnalytics,
+    rbacAnalytics,
+    recentActivity,
+    chartData,
+}: SuperAdminDashboardProps) {
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(amount);
+    };
+
+    const getStatusBadgeVariant = (status: string) => {
+        switch (status) {
+            case 'active':
+            case 'approved':
+            case 'verified':
+                return 'default';
+            case 'pending':
+            case 'draft':
+                return 'secondary';
+            case 'sent_for_review':
+                return 'outline';
+            case 'inactive':
+            case 'rejected':
+                return 'destructive';
+            default:
+                return 'secondary';
+        }
+    };
+
     const getRoleBadgeVariant = (slug: string) => {
         switch (slug) {
             case 'superadmin':
@@ -76,50 +146,36 @@ export default function SuperAdminDashboard({ analytics, recentUsers, usersByRol
         }
     };
 
-    const chartConfig = {
+    const productGrowthConfig = {
         count: {
-            label: 'Users',
+            label: 'Products',
             color: 'hsl(var(--chart-1))',
         },
     } satisfies ChartConfig;
 
-    const roleChartConfig = {
-        users: {
-            label: 'Users',
+    const revenueConfig = {
+        revenue: {
+            label: 'Revenue',
             color: 'hsl(var(--chart-2))',
         },
     } satisfies ChartConfig;
 
-    const handleUserAction = (userId: number, action: string) => {
-        switch (action) {
-            case 'view':
-                router.visit(route('users.show', { user: userId }));
-                break;
-            case 'edit':
-                router.visit(route('users.edit', { user: userId }));
-                break;
-            case 'impersonate':
-                router.post(`/impersonate/${userId}`);
-                break;
-        }
-    };
-
     return (
         <AppLayout>
-            <Head title="Dashboard" />
+            <Head title="Platform Dashboard" />
 
             <div className="space-y-6 p-4 sm:p-6">
                 {/* Header */}
                 <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Admin Dashboard</h1>
-                        <p className="text-muted-foreground">Monitor system activity and manage users</p>
+                        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Platform Dashboard</h1>
+                        <p className="text-muted-foreground">Monitor platform metrics, vendors, and business operations</p>
                     </div>
                     <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
                         <Button asChild className="justify-center">
-                            <Link href={route('users.create')}>
-                                <Plus className="mr-2 h-4 w-4" />
-                                Add User
+                            <Link href={route('vendors.index')}>
+                                <Building2 className="mr-2 h-4 w-4" />
+                                Manage Vendors
                             </Link>
                         </Button>
                         <Button variant="outline" asChild className="justify-center">
@@ -132,94 +188,75 @@ export default function SuperAdminDashboard({ analytics, recentUsers, usersByRol
                     </div>
                 </div>
 
-                {/* Overview Cards */}
+                {/* Platform Overview Cards */}
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-                            <Users className="h-4 w-4 text-muted-foreground" />
+                            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+                            <Package className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{analytics.users.total.toLocaleString()}</div>
-                            <p className="text-xs text-muted-foreground">
-                                <span className="inline-flex items-center">
-                                    <TrendingUp className="mr-1 h-3 w-3" />
-                                    {analytics.users.recent} new this week
-                                </span>
-                            </p>
+                            <div className="text-2xl font-bold">{platformAnalytics.total_products.toLocaleString()}</div>
+                            <p className="text-xs text-muted-foreground">{platformAnalytics.unique_products.toLocaleString()} unique items</p>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Verification Rate</CardTitle>
-                            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                            <CardTitle className="text-sm font-medium">Active Vendors</CardTitle>
+                            <Building2 className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{analytics.users.verification_rate}%</div>
-                            <div className="mt-2">
-                                <Progress value={analytics.users.verification_rate} className="h-2" />
-                            </div>
-                            <p className="mt-1 text-xs text-muted-foreground">
-                                {analytics.users.verified} of {analytics.users.total} verified
-                            </p>
+                            <div className="text-2xl font-bold">{platformAnalytics.active_vendors}</div>
+                            <p className="text-xs text-muted-foreground">of {platformAnalytics.total_vendors} total vendors</p>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Active Roles</CardTitle>
-                            <Shield className="h-4 w-4 text-muted-foreground" />
+                            <CardTitle className="text-sm font-medium">Platform Value</CardTitle>
+                            <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{analytics.roles.with_users}</div>
-                            <p className="text-xs text-muted-foreground">of {analytics.roles.total} total roles</p>
+                            <div className="text-2xl font-bold">{formatCurrency(platformAnalytics.platform_value)}</div>
+                            <p className="text-xs text-muted-foreground">Total inventory value</p>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Active Today</CardTitle>
-                            <Activity className="h-4 w-4 text-muted-foreground" />
+                            <CardTitle className="text-sm font-medium">Active Batches</CardTitle>
+                            <Package2 className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{analytics.users.active_today}</div>
-                            <p className="text-xs text-muted-foreground">users active in last 24h</p>
+                            <div className="text-2xl font-bold">{platformAnalytics.active_batches}</div>
+                            <p className="text-xs text-muted-foreground">of {platformAnalytics.total_batches} total batches</p>
                         </CardContent>
                     </Card>
                 </div>
 
                 {/* Charts Section */}
-                <div className="grid gap-6 lg:grid-cols-2">
-                    {/* User Growth Chart */}
+                <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                    {/* Product Growth Chart */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <TrendingUp className="h-5 w-5" />
-                                User Growth (30 Days)
+                                Product Growth (30 Days)
                             </CardTitle>
-                            <CardDescription>Daily user registrations over the last month</CardDescription>
+                            <CardDescription>Daily product additions to platform</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            {systemHealth.users_growth.length > 0 ? (
-                                <ChartContainer config={chartConfig} className="h-48 sm:h-56 lg:h-64">
-                                    <AreaChart data={systemHealth.users_growth}>
+                            {chartData.product_growth.length > 0 ? (
+                                <ChartContainer config={productGrowthConfig} className="h-48 sm:h-56">
+                                    <AreaChart data={chartData.product_growth}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis
                                             dataKey="date"
                                             tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                         />
                                         <YAxis />
-                                        <ChartTooltip
-                                            content={<ChartTooltipContent />}
-                                            labelFormatter={(value) =>
-                                                new Date(value).toLocaleDateString('en-US', {
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                    year: 'numeric',
-                                                })
-                                            }
-                                        />
+                                        <ChartTooltip content={<ChartTooltipContent />} />
                                         <Area
                                             type="monotone"
                                             dataKey="count"
@@ -235,91 +272,97 @@ export default function SuperAdminDashboard({ analytics, recentUsers, usersByRol
                         </CardContent>
                     </Card>
 
-                    {/* Role Distribution Chart */}
+                    {/* Revenue Trends */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Shield className="h-5 w-5" />
-                                Role Distribution
+                                <DollarSign className="h-5 w-5" />
+                                Revenue Trends (30 Days)
                             </CardTitle>
-                            <CardDescription>Users distribution across different roles</CardDescription>
+                            <CardDescription>Daily inventory value trends</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <ChartContainer config={roleChartConfig} className="h-48 sm:h-56 lg:h-64">
-                                <BarChart data={usersByRole}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="role" angle={-45} textAnchor="end" height={80} interval={0} fontSize={12} />
-                                    <YAxis />
-                                    <ChartTooltip content={<ChartTooltipContent />} />
-                                    <Bar dataKey="users" fill="var(--color-users)" />
-                                </BarChart>
-                            </ChartContainer>
+                            {chartData.revenue_trends.length > 0 ? (
+                                <ChartContainer config={revenueConfig} className="h-48 sm:h-56">
+                                    <LineChart data={chartData.revenue_trends}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis
+                                            dataKey="date"
+                                            tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                        />
+                                        <YAxis tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`} />
+                                        <ChartTooltip
+                                            content={<ChartTooltipContent />}
+                                            formatter={(value) => [formatCurrency(value as number), 'Revenue']}
+                                        />
+                                        <Line type="monotone" dataKey="revenue" stroke="var(--color-revenue)" strokeWidth={2} />
+                                    </LineChart>
+                                </ChartContainer>
+                            ) : (
+                                <div className="flex h-48 items-center justify-center text-muted-foreground">No data available</div>
+                            )}
+                        </CardContent>
+                    </Card>
+
+                    {/* Batch Progress */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <PackageCheck className="h-5 w-5" />
+                                Batch Completion
+                            </CardTitle>
+                            <CardDescription>Batch processing efficiency</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium">Pending Review</span>
+                                    <span className="text-2xl font-bold">{productAnalytics.pending_review}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium">Avg Batch Size</span>
+                                    <span className="text-2xl font-bold">{Math.round(productAnalytics.avg_batch_size)}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium">Verified Products</span>
+                                    <span className="text-2xl font-bold">{productAnalytics.verified_products.toLocaleString()}</span>
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
 
-                {/* Users Table and Role Breakdown */}
-                <div className="grid gap-6 xl:grid-cols-3">
-                    {/* Recent Users */}
-                    <Card className="xl:col-span-2">
+                {/* Analytics Grid */}
+                <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                    {/* Top Vendors */}
+                    <Card>
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle>Recent Users</CardTitle>
-                                    <CardDescription>Latest user registrations and activity</CardDescription>
+                                    <CardTitle>Top Vendors</CardTitle>
+                                    <CardDescription>Most active vendors by product count</CardDescription>
                                 </div>
                                 <Button variant="outline" size="sm" asChild>
-                                    <Link href={route('users.index')}>View All</Link>
+                                    <Link href={route('vendors.index')}>View All</Link>
                                 </Button>
                             </div>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
-                                {recentUsers.length === 0 ? (
-                                    <div className="py-6 text-center text-muted-foreground">No users found</div>
+                                {vendorAnalytics.top_vendors.length === 0 ? (
+                                    <div className="py-6 text-center text-muted-foreground">No vendors found</div>
                                 ) : (
-                                    recentUsers.map((user) => (
-                                        <div key={user.id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                            <div className="flex min-w-0 flex-1 items-center gap-3">
-                                                <Avatar className="h-8 w-8 flex-shrink-0">
-                                                    <AvatarFallback className="text-xs">{getInitials(user.name)}</AvatarFallback>
-                                                </Avatar>
-                                                <div className="min-w-0 flex-1">
-                                                    <p className="truncate text-sm font-medium">{user.name}</p>
-                                                    <p className="truncate text-xs text-muted-foreground">{user.email}</p>
-                                                    <p className="text-xs text-muted-foreground sm:hidden">{user.created_at_human}</p>
-                                                </div>
+                                    vendorAnalytics.top_vendors.map((vendor) => (
+                                        <div key={vendor.id} className="flex items-center justify-between">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="truncate text-sm font-medium">{vendor.name}</p>
+                                                <p className="truncate text-xs text-muted-foreground">{vendor.email}</p>
                                             </div>
-                                            <div className="flex flex-shrink-0 items-center justify-between gap-2 sm:justify-end">
-                                                <div className="flex items-center gap-2">
-                                                    <Badge variant={getRoleBadgeVariant(user.role_slug)} className="text-xs">
-                                                        {user.role}
-                                                    </Badge>
-                                                    {user.verified ? (
-                                                        <UserCheck className="h-4 w-4 text-green-500" />
-                                                    ) : (
-                                                        <UserX className="h-4 w-4 text-orange-500" />
-                                                    )}
-                                                </div>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                                            <MoreHorizontal className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuItem onClick={() => handleUserAction(user.id, 'view')}>
-                                                            <Eye className="mr-2 h-4 w-4" />
-                                                            View
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => handleUserAction(user.id, 'edit')}>Edit</DropdownMenuItem>
-                                                        {user.role_slug !== 'superadmin' && (
-                                                            <DropdownMenuItem onClick={() => handleUserAction(user.id, 'impersonate')}>
-                                                                Impersonate
-                                                            </DropdownMenuItem>
-                                                        )}
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
+                                            <div className="flex items-center gap-2">
+                                                <Badge variant={getStatusBadgeVariant(vendor.status)} className="text-xs">
+                                                    {vendor.status}
+                                                </Badge>
+                                                <span className="text-sm font-medium">{vendor.products_count}</span>
                                             </div>
                                         </div>
                                     ))
@@ -328,55 +371,190 @@ export default function SuperAdminDashboard({ analytics, recentUsers, usersByRol
                         </CardContent>
                     </Card>
 
-                    {/* Role Statistics */}
+                    {/* Product Categories */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Role Breakdown</CardTitle>
-                            <CardDescription>Detailed user distribution by role</CardDescription>
+                            <CardTitle>Top Categories</CardTitle>
+                            <CardDescription>Most popular product categories</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
-                                {usersByRole.map((role) => (
-                                    <div key={role.slug} className="space-y-2">
-                                        <div className="flex items-center justify-between">
+                                {Object.entries(productAnalytics.top_categories).length === 0 ? (
+                                    <div className="py-6 text-center text-muted-foreground">No categories found</div>
+                                ) : (
+                                    Object.entries(productAnalytics.top_categories).map(([category, count]) => {
+                                        const maxValue = Math.max(...Object.values(productAnalytics.top_categories), 1);
+                                        return (
+                                            <div key={category} className="space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-sm font-medium">{category}</span>
+                                                    <span className="text-sm text-muted-foreground">{count}</span>
+                                                </div>
+                                                <Progress value={(count / maxValue) * 100} className="h-2" />
+                                            </div>
+                                        );
+                                    })
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* RBAC Analytics */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Shield className="h-5 w-5" />
+                                RBAC Overview
+                            </CardTitle>
+                            <CardDescription>User roles and permissions</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4 text-center">
+                                    <div>
+                                        <div className="text-2xl font-bold">{rbacAnalytics.total_roles}</div>
+                                        <div className="text-xs text-muted-foreground">Total Roles</div>
+                                    </div>
+                                    <div>
+                                        <div className="text-2xl font-bold">{rbacAnalytics.total_permissions}</div>
+                                        <div className="text-xs text-muted-foreground">Permissions</div>
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    {rbacAnalytics.users_by_role.map((role) => (
+                                        <div key={role.slug} className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
                                                 <Badge variant={getRoleBadgeVariant(role.slug)} className="text-xs">
                                                     {role.role}
                                                 </Badge>
-                                                <span className="text-sm font-medium">{role.users}</span>
+                                                <span className="text-sm">{role.users}</span>
                                             </div>
-                                            <span className="text-sm text-muted-foreground">{role.percentage}%</span>
+                                            <span className="text-xs text-muted-foreground">{role.percentage}%</span>
                                         </div>
-                                        <Progress value={role.percentage} className="h-2" />
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
 
-                {/* System Status */}
+                {/* Recent Activity */}
+                <div className="grid gap-6 lg:grid-cols-2">
+                    {/* Recent Batches */}
+                    <Card>
+                        <CardHeader>
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <CardTitle>Recent Batches</CardTitle>
+                                    <CardDescription>Latest batch submissions and activity</CardDescription>
+                                </div>
+                                <Button variant="outline" size="sm" asChild>
+                                    <Link href={route('batches.index')}>View All</Link>
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                {recentActivity.recent_batches.length === 0 ? (
+                                    <div className="py-6 text-center text-muted-foreground">No batches found</div>
+                                ) : (
+                                    recentActivity.recent_batches.map((batch) => (
+                                        <div key={batch.id} className="flex items-center justify-between">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="truncate text-sm font-medium">{batch.name}</p>
+                                                <p className="truncate text-xs text-muted-foreground">
+                                                    {batch.vendor_name} • {batch.products_count} products
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">{batch.created_at_human}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Badge variant={getStatusBadgeVariant(batch.status)} className="text-xs">
+                                                    {batch.status.replace('_', ' ')}
+                                                </Badge>
+                                                <Button variant="ghost" size="sm" asChild>
+                                                    <Link href={route('batches.show', { batch: batch.id })}>
+                                                        <Eye className="h-4 w-4" />
+                                                    </Link>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Recent Vendors */}
+                    <Card>
+                        <CardHeader>
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <CardTitle>Recent Vendors</CardTitle>
+                                    <CardDescription>Latest vendor registrations</CardDescription>
+                                </div>
+                                <Button variant="outline" size="sm" asChild>
+                                    <Link href={route('vendors.index')}>View All</Link>
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                {recentActivity.recent_vendors.length === 0 ? (
+                                    <div className="py-6 text-center text-muted-foreground">No vendors found</div>
+                                ) : (
+                                    recentActivity.recent_vendors.map((vendor) => (
+                                        <div key={vendor.id} className="flex items-center justify-between">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="truncate text-sm font-medium">{vendor.name}</p>
+                                                <p className="truncate text-xs text-muted-foreground">
+                                                    {vendor.email} • {vendor.products_count} products
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">{vendor.created_at_human}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Badge variant={getStatusBadgeVariant(vendor.status)} className="text-xs">
+                                                    {vendor.status}
+                                                </Badge>
+                                                <Button variant="ghost" size="sm" asChild>
+                                                    <Link href={route('vendors.show', { vendor: vendor.id })}>
+                                                        <Eye className="h-4 w-4" />
+                                                    </Link>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Quick Stats */}
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Activity className="h-5 w-5" />
-                            System Status
+                            Platform Health
                         </CardTitle>
-                        <CardDescription>Current system health and statistics</CardDescription>
+                        <CardDescription>Key platform metrics and status indicators</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                             <div className="flex items-center gap-2">
                                 <div className="h-3 w-3 flex-shrink-0 rounded-full bg-green-500"></div>
-                                <span className="text-sm">Database: {systemHealth.database_status}</span>
+                                <span className="text-sm">New vendors this month: {vendorAnalytics.new_this_month}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="h-3 w-3 flex-shrink-0 rounded-full bg-blue-500"></div>
-                                <span className="text-sm">Permissions: {analytics.permissions.total} configured</span>
+                                <span className="text-sm">Total users: {platformAnalytics.total_users}</span>
                             </div>
-                            <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-1">
+                            <div className="flex items-center gap-2">
                                 <div className="h-3 w-3 flex-shrink-0 rounded-full bg-yellow-500"></div>
-                                <span className="text-sm">Last updated: {systemHealth.last_updated}</span>
+                                <span className="text-sm">Permission categories: {rbacAnalytics.permissions_categories}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="h-3 w-3 flex-shrink-0 rounded-full bg-purple-500"></div>
+                                <span className="text-sm">Revenue: {formatCurrency(vendorAnalytics.total_revenue_processed)}</span>
                             </div>
                         </div>
                     </CardContent>
