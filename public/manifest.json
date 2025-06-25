@@ -1,7 +1,7 @@
 {
-  "name": "Laravel PWA",
-  "short_name": "Laravel PWA",
-  "description": "A Laravel Progressive Web Application",
+  "name": "Reverse Logistics System",
+  "short_name": "RLS",
+  "description": "A comprehensive reverse logistics management system",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -64,14 +64,14 @@
       "short_name": "Dashboard",
       "description": "Go to Dashboard",
       "url": "/dashboard",
-      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+      "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     },
     {
       "name": "Settings",
       "short_name": "Settings",
       "description": "Go to Settings",
       "url": "/settings",
-      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+      "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     }
   ],
   "categories": ["business", "productivity"],
