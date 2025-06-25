@@ -31,7 +31,7 @@ class RoleMiddleware
         }
 
         if (! $hasRole) {
-            abort(403, 'Insufficient permissions. Required role: ' . implode(' or ', $roles));
+            abort(403, 'Insufficient permissions. Required role: '.implode(' or ', $roles));
         }
 
         return $next($request);

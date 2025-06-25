@@ -1,5 +1,5 @@
 import { type RBACConfig } from '@/core/types';
-import { Shield } from 'lucide-react';
+import { Layers, Package, Shield } from 'lucide-react';
 
 export interface NavigationItem {
     label: string;
@@ -17,6 +17,62 @@ export interface NavigationSection {
     isOpen: (url: string) => boolean;
     canAccess: (rbacConfig: RBACConfig) => boolean;
 }
+
+/**
+ * Products Navigation Configuration
+ */
+export const PRODUCTS_NAVIGATION: NavigationSection = {
+    key: 'products',
+    label: 'Products',
+    icon: Package,
+    tooltip: 'Product Management',
+    isOpen: (url: string) => url.startsWith('/products'),
+    canAccess: () => {
+        return true; // All authenticated users can see products based on their role permissions
+    },
+    items: [
+        {
+            label: 'All Products',
+            routeName: 'products.index',
+            urlPattern: '/products',
+            isActive: (url: string) => url === '/products' || url.startsWith('/products?'),
+        },
+        {
+            label: 'Add Product',
+            routeName: 'products.create',
+            urlPattern: '/products/create',
+            isActive: (url: string) => url === '/products/create',
+        },
+    ],
+};
+
+/**
+ * Batches Navigation Configuration
+ */
+export const BATCHES_NAVIGATION: NavigationSection = {
+    key: 'batches',
+    label: 'Batches',
+    icon: Layers,
+    tooltip: 'Batch Management',
+    isOpen: (url: string) => url.startsWith('/batches'),
+    canAccess: () => {
+        return true; // All authenticated users can see batches based on their role permissions
+    },
+    items: [
+        {
+            label: 'All Batches',
+            routeName: 'batches.index',
+            urlPattern: '/batches',
+            isActive: (url: string) => url === '/batches' || url.startsWith('/batches?'),
+        },
+        {
+            label: 'Create Batch',
+            routeName: 'batches.create',
+            urlPattern: '/batches/create',
+            isActive: (url: string) => url === '/batches/create',
+        },
+    ],
+};
 
 /**
  * RBAC Navigation Configuration
@@ -96,4 +152,11 @@ export const shouldShowNavigationItem = (item: NavigationItem, rbacConfig: RBACC
  */
 export const getFilteredRBACItems = (rbacConfig: RBACConfig): NavigationItem[] => {
     return RBAC_NAVIGATION.items.filter((item) => shouldShowNavigationItem(item, rbacConfig));
+};
+
+/**
+ * Get all navigation sections
+ */
+export const getAllNavigationSections = (): NavigationSection[] => {
+    return [PRODUCTS_NAVIGATION, BATCHES_NAVIGATION, RBAC_NAVIGATION];
 };

@@ -9,7 +9,7 @@ Route::get('/', function () {
 })->name('home');
 
 // Auth routes
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 // Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {

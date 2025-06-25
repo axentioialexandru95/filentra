@@ -13,6 +13,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
+
     use Notifiable;
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable
 
     /**
      * Get the user's role
+     *
      * @return BelongsTo<Role, User>
      */
     public function role(): BelongsTo
@@ -67,7 +69,7 @@ class User extends Authenticatable
     /**
      * Check if user has a specific role
      */
-    public function hasRole(string $role): bool|null
+    public function hasRole(string $role): ?bool
     {
         return $this->role?->slug === $role;
     }
@@ -86,9 +88,10 @@ class User extends Authenticatable
 
     /**
      * Check if user has any of the given permissions
-     * @param array<string> $permissions
+     *
+     * @param  array<string>  $permissions
      */
-    public function hasAnyPermission(array $permissions): bool|null
+    public function hasAnyPermission(array $permissions): ?bool
     {
         foreach ($permissions as $permission) {
             if ($this->hasPermission($permission)) {
@@ -102,9 +105,9 @@ class User extends Authenticatable
     /**
      * Check if user has all of the given permissions
      *
-     * @param array<string> $permissions
+     * @param  array<string>  $permissions
      */
-    public function hasAllPermissions(array $permissions): bool|null
+    public function hasAllPermissions(array $permissions): ?bool
     {
         foreach ($permissions as $permission) {
             if (! $this->hasPermission($permission)) {
@@ -153,7 +156,7 @@ class User extends Authenticatable
     /**
      * Get user's role name for display
      */
-    public function getRoleName(): string|null
+    public function getRoleName(): ?string
     {
         return $this->role->name ?? 'No Role';
     }

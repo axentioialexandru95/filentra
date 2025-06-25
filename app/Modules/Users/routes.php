@@ -3,8 +3,8 @@
 use App\Modules\Users\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-// Users routes
-Route::middleware(['auth', 'verified'])->group(function () {
+// Users routes - Only superadmin can manage users
+Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('users', [UserController::class, 'store'])->name('users.store');

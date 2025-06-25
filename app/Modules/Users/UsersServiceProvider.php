@@ -22,7 +22,7 @@ class UsersServiceProvider extends ServiceProvider
     {
         // Load routes with web middleware group
         Route::middleware('web')
-            ->group(__DIR__ . '/routes.php');
+            ->group(__DIR__.'/routes.php');
 
         // Load views if needed
         // $this->loadViewsFrom(__DIR__ . '/views', 'users');

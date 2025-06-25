@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index(Request $request): Response
     {
-        $users = User::query()
+        $users = User::with('role')
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
@@ -43,10 +43,14 @@ class UserController extends Controller
             'recent' => User::whereDate('created_at', '>=', now()->subDays(7))->count(),
         ];
 
+        // Get all available roles for create user dialog
+        $roles = \App\Role::orderBy('name')->get();
+
         return Inertia::render('modules/users/pages/index', [
             'data' => $users,
             'stats' => $stats,
             'filters' => $request->only(['search', 'status']),
+            'roles' => $roles,
         ]);
     }
 
@@ -55,7 +59,12 @@ class UserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('modules/users/pages/create');
+        // Get all available roles for superadmin to assign
+        $roles = \App\Role::orderBy('name')->get();
+
+        return Inertia::render('modules/users/pages/create', [
+            'roles' => $roles,
+        ]);
     }
 
     /**
@@ -63,10 +72,23 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $user = User::create($request->validated());
+        $validatedData = $request->validated();
+
+        // Auto-verify users created by superadmin
+        $validatedData['email_verified_at'] = now();
+
+        $user = User::create($validatedData);
+
+        // Assign the selected role
+        if (isset($validatedData['role_id'])) {
+            $role = \App\Role::find($validatedData['role_id']);
+            if ($role) {
+                $user->roles()->sync([$role->id]);
+            }
+        }
 
         return redirect()->route('users.index')
-            ->with('success', 'User created successfully.');
+            ->with('success', 'User created successfully and verified.');
     }
 
     /**

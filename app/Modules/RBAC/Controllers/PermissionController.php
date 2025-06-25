@@ -7,12 +7,12 @@ use App\Modules\RBAC\Requests\StorePermissionRequest;
 use App\Modules\RBAC\Requests\UpdatePermissionRequest;
 use App\Modules\RBAC\Resources\PermissionResource;
 use App\Permission;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class PermissionController extends Controller implements HasMiddleware
 {
@@ -30,6 +30,7 @@ class PermissionController extends Controller implements HasMiddleware
 
     /**
      * Display a listing of permissions.
+     *
      * @return \Inertia\Response
      */
     public function index(Request $request)
@@ -38,8 +39,8 @@ class PermissionController extends Controller implements HasMiddleware
 
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('description', 'like', '%' . $request->search . '%');
+                $q->where('name', 'like', '%'.$request->search.'%')
+                    ->orWhere('description', 'like', '%'.$request->search.'%');
             });
         }
 

@@ -13,7 +13,7 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create comprehensive permissions
+        // Create comprehensive permissions for reverse logistics system
         $permissions = [
             // User Management
             [
@@ -40,12 +40,6 @@ class RolePermissionSeeder extends Seeder
                 'description' => 'Can delete users',
                 'category' => 'user_management',
             ],
-            [
-                'name' => 'Export Users',
-                'slug' => 'export_users',
-                'description' => 'Can export user data',
-                'category' => 'user_management',
-            ],
 
             // Role & Permission Management
             [
@@ -61,24 +55,110 @@ class RolePermissionSeeder extends Seeder
                 'category' => 'role_management',
             ],
 
-            // Dashboard & Analytics
+            // Dashboard
             [
                 'name' => 'View Dashboard',
                 'slug' => 'view_dashboard',
                 'description' => 'Can access main dashboard',
                 'category' => 'dashboard',
             ],
+
+            // Product Management
             [
-                'name' => 'View Analytics',
-                'slug' => 'view_analytics',
-                'description' => 'Can view analytics and reports',
-                'category' => 'dashboard',
+                'name' => 'View Products',
+                'slug' => 'view_products',
+                'description' => 'Can view product listings',
+                'category' => 'products',
             ],
             [
-                'name' => 'Export Reports',
-                'slug' => 'export_reports',
-                'description' => 'Can export reports and data',
-                'category' => 'dashboard',
+                'name' => 'Create Products',
+                'slug' => 'create_products',
+                'description' => 'Can create new products',
+                'category' => 'products',
+            ],
+            [
+                'name' => 'Edit Products',
+                'slug' => 'edit_products',
+                'description' => 'Can edit products',
+                'category' => 'products',
+            ],
+            [
+                'name' => 'Delete Products',
+                'slug' => 'delete_products',
+                'description' => 'Can delete products',
+                'category' => 'products',
+            ],
+            [
+                'name' => 'Upload CSV',
+                'slug' => 'upload_csv',
+                'description' => 'Can upload CSV files with product data',
+                'category' => 'products',
+            ],
+            [
+                'name' => 'Manage Product Quality',
+                'slug' => 'manage_product_quality',
+                'description' => 'Can assign quality ratings (A, B, C) to products',
+                'category' => 'products',
+            ],
+
+            // Batch Management
+            [
+                'name' => 'View Batches',
+                'slug' => 'view_batches',
+                'description' => 'Can view product batches',
+                'category' => 'batches',
+            ],
+            [
+                'name' => 'Create Batches',
+                'slug' => 'create_batches',
+                'description' => 'Can create product batches',
+                'category' => 'batches',
+            ],
+            [
+                'name' => 'Manage Batches',
+                'slug' => 'manage_batches',
+                'description' => 'Can edit and delete product batches',
+                'category' => 'batches',
+            ],
+            [
+                'name' => 'Send Batches for Review',
+                'slug' => 'send_batches_for_review',
+                'description' => 'Can send batches for verification',
+                'category' => 'batches',
+            ],
+            [
+                'name' => 'Review Batches',
+                'slug' => 'review_batches',
+                'description' => 'Can review and approve/reject batches',
+                'category' => 'batches',
+            ],
+
+            // Vendor Management
+            [
+                'name' => 'View Vendors',
+                'slug' => 'view_vendors',
+                'description' => 'Can view vendor information',
+                'category' => 'vendors',
+            ],
+            [
+                'name' => 'Manage Vendors',
+                'slug' => 'manage_vendors',
+                'description' => 'Can manage vendor accounts and submissions',
+                'category' => 'vendors',
+            ],
+
+            // Warehouse Management
+            [
+                'name' => 'View Warehouse',
+                'slug' => 'view_warehouse',
+                'description' => 'Can view warehouse operations',
+                'category' => 'warehouse',
+            ],
+            [
+                'name' => 'Manage Inventory',
+                'slug' => 'manage_inventory',
+                'description' => 'Can manage inventory and stock levels',
+                'category' => 'warehouse',
             ],
 
             // System Administration
@@ -94,18 +174,6 @@ class RolePermissionSeeder extends Seeder
                 'description' => 'Can view system logs and audit trails',
                 'category' => 'system',
             ],
-            [
-                'name' => 'Manage Database',
-                'slug' => 'manage_database',
-                'description' => 'Can manage database operations',
-                'category' => 'system',
-            ],
-            [
-                'name' => 'Manage Backups',
-                'slug' => 'manage_backups',
-                'description' => 'Can create and manage system backups',
-                'category' => 'system',
-            ],
 
             // Impersonation & Security
             [
@@ -114,64 +182,8 @@ class RolePermissionSeeder extends Seeder
                 'description' => 'Can impersonate other users',
                 'category' => 'security',
             ],
-            [
-                'name' => 'View Security Logs',
-                'slug' => 'view_security_logs',
-                'description' => 'Can view security and access logs',
-                'category' => 'security',
-            ],
-            [
-                'name' => 'Manage Sessions',
-                'slug' => 'manage_sessions',
-                'description' => 'Can manage user sessions',
-                'category' => 'security',
-            ],
 
-            // Content Management
-            [
-                'name' => 'Manage Content',
-                'slug' => 'manage_content',
-                'description' => 'Can create and edit content',
-                'category' => 'content',
-            ],
-            [
-                'name' => 'Publish Content',
-                'slug' => 'publish_content',
-                'description' => 'Can publish and unpublish content',
-                'category' => 'content',
-            ],
-            [
-                'name' => 'Delete Content',
-                'slug' => 'delete_content',
-                'description' => 'Can delete content',
-                'category' => 'content',
-            ],
-
-            // E-commerce & Inventory (for future expansion)
-            [
-                'name' => 'View Products',
-                'slug' => 'view_products',
-                'description' => 'Can view product listings',
-                'category' => 'ecommerce',
-            ],
-            [
-                'name' => 'Manage Products',
-                'slug' => 'manage_products',
-                'description' => 'Can create, edit and manage products',
-                'category' => 'ecommerce',
-            ],
-            [
-                'name' => 'Manage Orders',
-                'slug' => 'manage_orders',
-                'description' => 'Can view and manage orders',
-                'category' => 'ecommerce',
-            ],
-            [
-                'name' => 'Manage Inventory',
-                'slug' => 'manage_inventory',
-                'description' => 'Can manage inventory and stock levels',
-                'category' => 'inventory',
-            ],
+            // Reports
             [
                 'name' => 'View Reports',
                 'slug' => 'view_reports',
@@ -179,21 +191,7 @@ class RolePermissionSeeder extends Seeder
                 'category' => 'reports',
             ],
 
-            // Communication & Notifications
-            [
-                'name' => 'Send Notifications',
-                'slug' => 'send_notifications',
-                'description' => 'Can send notifications to users',
-                'category' => 'communication',
-            ],
-            [
-                'name' => 'Manage Messages',
-                'slug' => 'manage_messages',
-                'description' => 'Can manage messages and communications',
-                'category' => 'communication',
-            ],
-
-            // Waitlist Management
+            // Waitlist Management (keeping for compatibility)
             [
                 'name' => 'View Waitlist',
                 'slug' => 'view_waitlist',
@@ -215,7 +213,7 @@ class RolePermissionSeeder extends Seeder
             );
         }
 
-        // Create roles with specific permission sets
+        // Create roles with specific permission sets for reverse logistics
         $roles = [
             [
                 'name' => 'Super Administrator',
@@ -227,48 +225,28 @@ class RolePermissionSeeder extends Seeder
             [
                 'name' => 'Administrator',
                 'slug' => 'admin',
-                'description' => 'Has administrative access to most system features',
+                'description' => 'Has administrative access to manage vendors, products, and quality control',
                 'level' => 90,
                 'permissions' => [
                     'view_users', 'create_users', 'edit_users', 'delete_users',
-                    'view_roles', 'view_dashboard', 'view_analytics', 'export_reports',
-                    'manage_content', 'publish_content', 'delete_content',
-                    'view_products', 'manage_products', 'manage_orders',
-                    'view_reports', 'send_notifications', 'manage_messages',
-                    'view_waitlist', 'manage_waitlist', 'view_security_logs',
-                ],
-            ],
-            [
-                'name' => 'Manager',
-                'slug' => 'manager',
-                'description' => 'Can manage users and content',
-                'level' => 50,
-                'permissions' => [
-                    'view_users', 'create_users', 'edit_users',
-                    'view_dashboard', 'view_analytics',
-                    'manage_content', 'publish_content',
-                    'view_products', 'manage_products',
-                    'view_reports', 'view_waitlist', 'manage_waitlist',
-                ],
-            ],
-            [
-                'name' => 'Content Editor',
-                'slug' => 'content_editor',
-                'description' => 'Can create and edit content',
-                'level' => 30,
-                'permissions' => [
-                    'view_dashboard', 'manage_content', 'publish_content',
-                    'view_products', 'view_reports',
+                    'view_roles', 'view_dashboard',
+                    'view_products', 'manage_product_quality',
+                    'view_batches', 'review_batches',
+                    'view_vendors', 'manage_vendors',
+                    'view_reports', 'view_system_logs',
+                    'view_waitlist', 'manage_waitlist',
                 ],
             ],
             [
                 'name' => 'Vendor',
                 'slug' => 'vendor',
-                'description' => 'Vendor with access to manage their products and orders',
+                'description' => 'Can upload and manage products, create batches for verification, and submit them for quality review',
                 'level' => 25,
                 'permissions' => [
-                    'view_dashboard', 'view_products', 'manage_products',
-                    'manage_orders', 'view_reports',
+                    'view_dashboard',
+                    'view_products', 'create_products', 'edit_products', 'delete_products', 'upload_csv',
+                    'view_batches', 'create_batches', 'manage_batches', 'send_batches_for_review',
+                    'view_reports',
                 ],
             ],
             [
@@ -277,30 +255,10 @@ class RolePermissionSeeder extends Seeder
                 'description' => 'Warehouse manager with inventory and logistics access',
                 'level' => 40,
                 'permissions' => [
-                    'view_dashboard', 'view_users',
-                    'view_products', 'manage_inventory',
-                    'manage_orders', 'view_reports',
-                ],
-            ],
-            [
-                'name' => 'Customer Support',
-                'slug' => 'customer_support',
-                'description' => 'Customer support representative',
-                'level' => 20,
-                'permissions' => [
-                    'view_dashboard', 'view_users',
-                    'view_products', 'manage_orders',
-                    'send_notifications', 'manage_messages',
-                    'view_waitlist',
-                ],
-            ],
-            [
-                'name' => 'User',
-                'slug' => 'user',
-                'description' => 'Standard user with basic access',
-                'level' => 10,
-                'permissions' => [
                     'view_dashboard',
+                    'view_products', 'view_batches',
+                    'view_warehouse', 'manage_inventory',
+                    'view_reports',
                 ],
             ],
         ];
@@ -319,6 +277,6 @@ class RolePermissionSeeder extends Seeder
             $role->permissions()->sync($permissionIds);
         }
 
-        $this->command->info('Comprehensive roles and permissions seeded successfully!');
+        $this->command->info('Reverse logistics roles and permissions seeded successfully!');
     }
 }

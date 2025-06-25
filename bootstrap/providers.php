@@ -7,4 +7,5 @@ return [
     App\Modules\Users\UsersServiceProvider::class,
     App\Modules\Waitlist\WaitlistServiceProvider::class,
     App\Modules\RBAC\RBACServiceProvider::class,
+    App\Modules\Products\ProductsServiceProvider::class,
 ];

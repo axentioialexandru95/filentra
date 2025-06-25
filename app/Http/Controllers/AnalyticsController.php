@@ -54,7 +54,7 @@ class AnalyticsController extends Controller
             'without_users' => Role::doesntHave('users')->count(),
             'most_assigned' => Role::withCount('users')
                 ->orderBy('users_count', 'desc')
-                ->first()->name
+                ->first()->name,
         ];
     }
 

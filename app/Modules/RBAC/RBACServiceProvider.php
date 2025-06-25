@@ -24,7 +24,7 @@ class RBACServiceProvider extends ServiceProvider
         Route::middleware(['web'])
             ->prefix('rbac')
             ->name('rbac.')
-            ->group(__DIR__ . '/routes.php');
+            ->group(__DIR__.'/routes.php');
 
         // Load views if needed
         // $this->loadViewsFrom(__DIR__ . '/modules/rbac/views', 'rbac');

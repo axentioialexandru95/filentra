@@ -11,7 +11,7 @@ import {
     SidebarMenuItem,
 } from '@/shared/components/ui/sidebar';
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, LayoutGrid, Users } from 'lucide-react';
+import { BarChart3, Layers, LayoutGrid, Package, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -24,13 +24,36 @@ export function AppSidebar() {
             href: '/dashboard',
             icon: LayoutGrid,
         },
-        {
+    ];
+
+    // Users management (Superadmin only)
+    if (user?.role?.slug === 'superadmin') {
+        mainNavItems.push({
             title: 'Users',
             href: '/users',
             icon: Users,
-        },
-    ];
+        });
+    }
 
+    // Products module (Vendors, Admins, Superadmin)
+    if (user?.role?.slug === 'vendor' || user?.role?.slug === 'admin' || user?.role?.slug === 'superadmin') {
+        mainNavItems.push({
+            title: 'Products',
+            href: '/products',
+            icon: Package,
+        });
+    }
+
+    // Batches module (Vendors, Admins, Superadmin)
+    if (user?.role?.slug === 'vendor' || user?.role?.slug === 'admin' || user?.role?.slug === 'superadmin') {
+        mainNavItems.push({
+            title: 'Batches',
+            href: '/batches',
+            icon: Layers,
+        });
+    }
+
+    // Analytics (Superadmin only)
     if (user?.role?.slug === 'superadmin') {
         mainNavItems.push({
             title: 'Analytics',

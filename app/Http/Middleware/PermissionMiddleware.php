@@ -31,7 +31,7 @@ class PermissionMiddleware
         }
 
         if (! $hasPermission) {
-            abort(403, 'Insufficient permissions. Required permission: ' . implode(' or ', $permissions));
+            abort(403, 'Insufficient permissions. Required permission: '.implode(' or ', $permissions));
         }
 
         return $next($request);

@@ -29,6 +29,7 @@ class RoleController extends Controller implements HasMiddleware
 
     /**
      * Display a listing of roles.
+     *
      * @return \Inertia\Response
      */
     public function index(Request $request)
@@ -37,8 +38,8 @@ class RoleController extends Controller implements HasMiddleware
 
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('description', 'like', '%' . $request->search . '%');
+                $q->where('name', 'like', '%'.$request->search.'%')
+                    ->orWhere('description', 'like', '%'.$request->search.'%');
             });
         }
 
@@ -57,6 +58,7 @@ class RoleController extends Controller implements HasMiddleware
 
     /**
      * Show the form for creating a new role.
+     *
      * @return \Inertia\Response
      */
     public function create()
@@ -91,6 +93,7 @@ class RoleController extends Controller implements HasMiddleware
 
     /**
      * Display the specified role.
+     *
      * @return \Inertia\Response
      */
     public function show(Role $role)
@@ -104,6 +107,7 @@ class RoleController extends Controller implements HasMiddleware
 
     /**
      * Show the form for editing the specified role.
+     *
      * @return \Inertia\Response
      */
     public function edit(Role $role)
@@ -124,7 +128,6 @@ class RoleController extends Controller implements HasMiddleware
 
     /**
      * Update the specified role.
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRoleRequest $request, Role $role): \Illuminate\Http\RedirectResponse
     {
@@ -142,6 +145,7 @@ class RoleController extends Controller implements HasMiddleware
 
     /**
      * Remove the specified role.
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Role $role)

@@ -14,7 +14,7 @@ class RBACAccessMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -33,7 +33,7 @@ class RBACAccessMiddleware
             }
         }
 
-        if (!$isSuperAdmin && !$hasRequiredPermission) {
+        if (! $isSuperAdmin && ! $hasRequiredPermission) {
             abort(403, 'Insufficient permissions to access RBAC management.');
         }
 

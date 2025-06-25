@@ -45,7 +45,7 @@ class UserResource extends JsonResource
     /**
      * Format a date attribute
      */
-    private function formatDate(mixed $date): string|null
+    private function formatDate(mixed $date): ?string
     {
         if ($date instanceof Carbon) {
             return $date->format('Y-m-d H:i:s');

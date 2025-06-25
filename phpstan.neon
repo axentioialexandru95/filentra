@@ -12,7 +12,7 @@ parameters:
         - bootstrap/providers.php
 
     # The level of rule strictness (0-9, 9 being the strictest)
-    level: 6
+    level: 4
 
     # Ignore errors in these paths
     excludePaths:

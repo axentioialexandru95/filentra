@@ -74,7 +74,7 @@ class HandleInertiaRequests extends Middleware
                 'features' => config('rbac.features'),
             ],
             'ziggy' => fn (): array => [
-                ...(new Ziggy())->toArray(),
+                ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
